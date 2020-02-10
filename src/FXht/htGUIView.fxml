@@ -1,51 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
 <BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXht.htGUIController">
-   <center>
-      <VBox prefHeight="147.0" prefWidth="297.0" BorderPane.alignment="CENTER">
-         <children>
-            <Label alignment="CENTER" prefHeight="74.0" prefWidth="330.0" text="WeatherTracker">
-               <font>
-                  <Font name="LilyUPC Italic" size="60.0" />
-               </font>
-            </Label>
-            <HBox prefHeight="80.0" prefWidth="292.0">
-               <children>
-                  <Button alignment="BOTTOM_CENTER" mnemonicParsing="false" text="Aloita">
-                     <HBox.margin>
-                        <Insets left="35.0" top="30.0" />
-                     </HBox.margin>
-                  </Button>
-                  <Button alignment="CENTER" mnemonicParsing="false" text="Lopeta">
-                     <HBox.margin>
-                        <Insets left="150.0" top="30.0" />
-                     </HBox.margin>
-                  </Button>
-               </children>
-            </HBox>
-         </children>
-      </VBox>
-   </center>
    <top>
-      <MenuBar BorderPane.alignment="CENTER">
+      <MenuBar prefHeight="25.0" prefWidth="333.0" BorderPane.alignment="CENTER">
         <menus>
-          <Menu mnemonicParsing="false" text="Help">
+          <Menu mnemonicParsing="false" text="Apua">
             <items>
-              <MenuItem mnemonicParsing="false" text="About" />
+              <MenuItem mnemonicParsing="false" onAction="#handleApua" text="Apua" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleTietoja" text="Tietoja..." />
             </items>
           </Menu>
         </menus>
       </MenuBar>
    </top>
+   <center>
+      <Pane BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fitHeight="262.0" fitWidth="336.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../kuvat/pilvi.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="30.0" layoutY="14.0" text="WeatherTracker" textFill="#8fd3bf">
+               <font>
+                  <Font name="LilyUPC Italic" size="60.0" />
+               </font>
+            </Label>
+            <Button layoutX="238.0" layoutY="213.0" mnemonicParsing="false" onAction="#handleLopeta" text="Lopeta" />
+            <Button layoutX="161.0" layoutY="213.0" mnemonicParsing="false" onAction="#handleAloita" text="Aloita" />
+         </children>
+      </Pane>
+   </center>
 </BorderPane>
