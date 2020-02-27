@@ -10,6 +10,7 @@ import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.ModalControllerInterface;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 
@@ -18,11 +19,18 @@ import javafx.stage.Stage;
  * @version 7.2.2020
  *
  */
-public class toinenGuiController implements ModalControllerInterface<String> {
+public class PaaIkkunaController implements ModalControllerInterface<String> {
+    @FXML
+    private Button textCancel;
     
     @FXML private void handleUusi() {
-        ModalController.showModal(toinenGuiController.class.getResource("tietoikkuna.fxml"),
+        ModalController.showModal(PaaIkkunaController.class.getResource("lisaysikkuna.fxml"),
                 "Lisää uusi", null, "");
+    }
+    
+    @FXML private void handleSaatila() {
+        ModalController.showModal(SaatilaController.class.getResource("lisaaSaatila.fxml"),
+                "Muokkaa säätiloja", null, "");
     }
     
     @FXML private void handleLopeta() {
@@ -31,7 +39,7 @@ public class toinenGuiController implements ModalControllerInterface<String> {
     }
     
     @FXML private void handleMuokkaa() {
-        ModalController.showModal(toinenGuiController.class.getResource("muutatietoja.fxml"),
+        ModalController.showModal(PaaIkkunaController.class.getResource("muokkausikkuna.fxml"),
                 "Muokkaa", null, "");
     }
 
@@ -44,7 +52,7 @@ public class toinenGuiController implements ModalControllerInterface<String> {
     }
     
     @FXML private void handleTietoja() {
-        ModalController.showModal(toinenGuiController.class.getResource("tietoja.fxml"),
+        ModalController.showModal(PaaIkkunaController.class.getResource("tietoja.fxml"),
                 "Tietoja", null, "");
     }
     
@@ -58,9 +66,13 @@ public class toinenGuiController implements ModalControllerInterface<String> {
         // if (vastaus) poistaPvm(true)
     }
     
+    @FXML private void handlePoistaSaa() {
+        ModalController.showModal(PaaIkkunaController.class.getResource("poistaSaatila.fxml"),
+                "Säätilan poisto", null, "");
+    }
+    
     @FXML private void handleCancel() {
-        // ModalController.closeStage(????????);
-        Dialogs.showMessageDialog("Ollaan tyhmiä kun ei edes päästä takaisin tästä ikkunasta, joten paina rastia..");
+        ModalController.closeStage(textCancel);
     }
     
     @FXML private void handleOK() {

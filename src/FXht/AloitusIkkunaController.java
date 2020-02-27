@@ -17,9 +17,9 @@ import javafx.fxml.FXML;
  * @version 17.1.2020
  *
  */
-public class htGUIController {
+public class AloitusIkkunaController {
     @FXML private void handleAloita() {
-        ModalController.showModal(htGUIController.class.getResource("muokkausikkuna.fxml"),
+        ModalController.showModal(AloitusIkkunaController.class.getResource("paaikkuna.fxml"),
                 "Tarkastele", null, "");
     }
 
@@ -31,7 +31,7 @@ public class htGUIController {
 
     
     @FXML private void handleTietoja() {
-        ModalController.showModal(htGUIController.class.getResource("tietoja.fxml"),
+        ModalController.showModal(AloitusIkkunaController.class.getResource("tietoja.fxml"),
                 "Tietoja", null, "");
     }
     
