@@ -20,6 +20,15 @@ public class Paiva {
     private double sademaara = 0.0; 
     private String huomiot = "";
     
+
+    /**
+     * Hakee päivämäärän
+     * @return palauttaa päivämäärän
+     */
+    public String getPvm() {
+        return pvm;
+    }
+    
     /**
      * @param args ei käytössä
      */
@@ -57,7 +66,7 @@ public class Paiva {
      */
     public void taytaPvmTiedoilla() {
         pvm = arvoPaiva();
-        paikka = "Jyväskylä" +rand(1, 310);
+        paikka = "Jyväskylä " +rand(1, 310);
         kello = "10:29";
         alinLampo = -2.2;
         ylinLampo = 3.3;
@@ -75,8 +84,6 @@ public class Paiva {
                 "°C" + ", ylin lämpötila " + String.format("%2.1f", ylinLampo) + 
                 "°C" + " ja sademäärä " + String.format("%2.1f", sademaara) + "mm");
         out.println("Huomiot: " + huomiot);
-    }
-    
-    
+    } 
     
 }

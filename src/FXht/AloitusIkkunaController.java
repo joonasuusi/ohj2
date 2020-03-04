@@ -8,8 +8,10 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import fi.jyu.mit.fxgui.ModalController;
+import fi.jyu.mit.fxgui.ModalControllerInterface;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.stage.Stage;
 
 
 /**
@@ -17,7 +19,7 @@ import javafx.fxml.FXML;
  * @version 17.1.2020
  *
  */
-public class AloitusIkkunaController {
+public class AloitusIkkunaController implements ModalControllerInterface<String> {
     @FXML private void handleAloita() {
         ModalController.showModal(AloitusIkkunaController.class.getResource("paaikkuna.fxml"),
                 "Tarkastele", null, "");
@@ -26,9 +28,6 @@ public class AloitusIkkunaController {
     @FXML private void handleLopeta() {
         Platform.exit();
     }
-    
-
-
     
     @FXML private void handleTietoja() {
         ModalController.showModal(AloitusIkkunaController.class.getResource("tietoja.fxml"),
@@ -51,4 +50,23 @@ public class AloitusIkkunaController {
         }
 
     }
+
+    @Override
+    public String getResult() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void handleShown() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void setDefault(String oletus) {
+        // TODO Auto-generated method stub
+        
+    }
+    
 }

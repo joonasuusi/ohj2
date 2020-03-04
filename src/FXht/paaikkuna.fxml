@@ -19,7 +19,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXht.PaaIkkunaController">
    <center>
-      <ScrollPane BorderPane.alignment="CENTER">
+      <ScrollPane fx:id="panelPaiva" fitToWidth="true" pannable="true" BorderPane.alignment="CENTER">
          <content>
             <GridPane hgap="10.0">
               <columnConstraints>
@@ -152,7 +152,7 @@
    <left>
       <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <center>
-            <ListChooser BorderPane.alignment="CENTER" />
+            <ListChooser fx:id="chooserPaivat" BorderPane.alignment="CENTER" />
          </center>
          <top>
             <VBox BorderPane.alignment="CENTER">
