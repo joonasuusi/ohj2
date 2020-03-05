@@ -54,6 +54,11 @@ public class PaaIkkunaController implements Initializable {
                 "Muokkaa säätiloja", null, "");
     }
     
+    @FXML private void handlePoistaSaa() {
+        ModalController.showModal(PaaIkkunaController.class.getResource("poistaSaatila.fxml"),
+                "Säätilan poisto", null, "");
+    }
+    
     @FXML private void handleLopeta() {
         tallenna();
         Platform.exit();
@@ -86,11 +91,7 @@ public class PaaIkkunaController implements Initializable {
                 "Poistetaanko päivämäärä: 12.3.2020", "Kyllä", "Ei");
         // if (vastaus) poistaPvm(true)
     }
-    
-    @FXML private void handlePoistaSaa() {
-        ModalController.showModal(PaaIkkunaController.class.getResource("poistaSaatila.fxml"),
-                "Säätilan poisto", null, "");
-    }
+
     
     @FXML private void handleCancel() {
         ModalController.closeStage(textCancel);
