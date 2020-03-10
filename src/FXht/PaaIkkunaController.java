@@ -106,6 +106,9 @@ public class PaaIkkunaController implements Initializable {
     WeatherTracker weathertracker;
     private TextArea areaPaiva = new TextArea();
     
+    /**
+     * Aliohjelma joka ohjaa sivustolle jossa käyttöohjeet käyttöliittymälle
+     */
     private void apua() {
         Desktop desktop = Desktop.getDesktop();
         try {
@@ -118,11 +121,16 @@ public class PaaIkkunaController implements Initializable {
         }
     }
     
-    
+    /**
+     * Aliohjelma joka tallentaa syötetyt tiedot
+     */
     private void tallenna() {
         Dialogs.showMessageDialog("Tallennetetaan! Mutta ei toimi vielä");
     }
     
+    /**
+     * Lisätään uusi päivämäärä tiedoilla näyttöön
+     */
     private void uusiPaiva() {
         Paiva uusi = new Paiva();
         uusi.taytaPvmTiedoilla(); // TODO: korvaa oikeasti dialogilla(se on jo) handleuudessa
@@ -137,6 +145,11 @@ public class PaaIkkunaController implements Initializable {
         
     }
     
+    /**
+     * Tyhjennetään lista ja haetaan weathertracker luokalta päivämäärä
+     * ja lisätään se seuraavaan indeksiin
+     * @param pnro päivämäärän järjestysnumero
+     */
     private void hae(String pnro) {
         chooserPaivat.clear();
         
@@ -149,6 +162,9 @@ public class PaaIkkunaController implements Initializable {
         chooserPaivat.setSelectedIndex(index);
     }
     
+    /**
+     * Alustetaan ja luodaan näyttöön uusi päivä
+     */
     private void alusta() {
         panelPaiva.setContent(areaPaiva);
         areaPaiva.setFont(new Font("Courier New", 12));

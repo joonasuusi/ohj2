@@ -3,6 +3,8 @@
  */
 package ht.wt;
 
+import java.util.List;
+
 /**
  * TODO: Lisää CRC-kortit
  * @author Joonas Uusi-Autti & Sini Lällä
@@ -12,6 +14,7 @@ package ht.wt;
 public class WeatherTracker {
     
     Paivat paivat = new Paivat();
+    Saatilat saatilat = new Saatilat();
  
 
     /**
@@ -20,16 +23,26 @@ public class WeatherTracker {
     public static void main(String[] args) {
         WeatherTracker weathertracker = new WeatherTracker();
         
+        try {
         Paiva pvm = new Paiva(), pvm1 = new Paiva();
         pvm.taytaPvmTiedoilla();
         pvm1.taytaPvmTiedoilla();
     
-        try {
+        
             weathertracker.lisaa(pvm);
             weathertracker.lisaa(pvm1);
-        } catch (SailoException e) {
-            System.err.println(e.getMessage());
-        }
+            Saatila saa1 = new Saatila();
+            saa1.paivanSaa();
+            weathertracker.lisaa(saa1);
+            Saatila saa2 = new Saatila();
+            saa2.paivanSaa();
+            weathertracker.lisaa(saa2);
+            Saatila saa3 = new Saatila();
+            saa3.paivanSaa();
+            weathertracker.lisaa(saa3);
+            Saatila saa4 = new Saatila();
+            saa4.paivanSaa();
+            weathertracker.lisaa(saa4);
         
         
 
@@ -38,7 +51,13 @@ public class WeatherTracker {
             Paiva paiva = weathertracker.annaPaiva(i);
             System.out.println("Päivämäärä: " + i);
             paiva.tulosta(System.out);
+            List<Saatila> loytyneet = weathertracker.annaSaatilat(paiva);
         }
+        
+        } catch (SailoException e) {
+            System.err.println(e.getMessage());
+        }
+        
     }
     
     
@@ -68,6 +87,24 @@ public class WeatherTracker {
        paivat.lisaa(paiva); 
     }
     
+    /**
+     * Lisätään säätila
+     * @param saatila lisätään
+     * @throws SailoException jos ei mahu
+     */
+    public void lisaa(Saatila saatila) throws SailoException {
+        saatilat.lisaa(saatila); 
+     }
+    
+    
+    /**
+     * 
+     * @param paiva päivä jonka säätila halutaan
+     * @return lista säätiloista
+     */
+    public List<Saatila> annaSaatila(Paiva paiva) {
+        saatilat.annaSaatila(paiva.getSaa()); //pitäsköhän olla joku tunnusnro...
+    }
     
     /**
      * Saadaan päivien lukumäärä

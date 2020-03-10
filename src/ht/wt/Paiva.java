@@ -17,6 +17,7 @@ public class Paiva {
     private String kello = "";
     private double alinLampo = 0.0;
     private double ylinLampo = 0.0;
+    private int saatila;
     private double sademaara = 0.0; 
     private String huomiot = "";
     
@@ -27,6 +28,13 @@ public class Paiva {
      */
     public String getPvm() {
         return pvm;
+    }
+    
+    /**
+     * @return Säätilan tunnusnumero
+     */
+    public int getSaa() {
+        return saatila;
     }
     
     /**

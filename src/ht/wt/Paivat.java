@@ -54,6 +54,7 @@ public class Paivat {
     }
 
     /**
+     * 
      * Lisää uuden päivämäärän tietorakenteeeseen.
      * Ottaa päivämäärän omistukseensa.
      * @param pvm Lisättävän päivämäärän viite. Huom. tietorakenne muuttuu omistajaksi.

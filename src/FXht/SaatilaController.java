@@ -5,6 +5,7 @@ import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.ModalControllerInterface;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 
 /**
  * @author Joonas Uusi-Autti
@@ -13,8 +14,9 @@ import javafx.scene.control.Button;
  */
 public class SaatilaController implements ModalControllerInterface<String> {
     
-    @FXML
-    private Button textCancel;
+    @FXML private Button textCancel;
+    
+    @FXML private TextField saaNro;
     
     @FXML private void handleTallenna() {
         tallenna();
