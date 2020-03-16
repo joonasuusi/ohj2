@@ -14,6 +14,7 @@ import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.ModalControllerInterface;
 import fi.jyu.mit.fxgui.TextAreaOutputStream;
 import ht.wt.Paiva;
+import ht.wt.Saatila;
 import ht.wt.SailoException;
 import ht.wt.WeatherTracker;
 import javafx.application.Platform;
@@ -34,7 +35,9 @@ public class PaaIkkunaController implements Initializable {
 
     @FXML private Button textCancel;
     @FXML ListChooser<Paiva> chooserPaivat;
+    @FXML ListChooser<Saatila> chooserSaatilat;
     @FXML private ScrollPane panelPaiva;
+    @FXML private ScrollPane panelSaa;
     
     @Override
     public void initialize(URL url, ResourceBundle bundle) {
@@ -50,8 +53,9 @@ public class PaaIkkunaController implements Initializable {
     }
     
     @FXML private void handleSaatila() {
-        ModalController.showModal(PaaIkkunaController.class.getResource("lisaaSaatila.fxml"),
-                "Muokkaa säätiloja", null, "");
+        //ModalController.showModal(PaaIkkunaController.class.getResource("lisaaSaatila.fxml"),
+        //        "Muokkaa säätiloja", null, "");
+        uusiSaa();
     }
     
     @FXML private void handlePoistaSaa() {
@@ -105,6 +109,8 @@ public class PaaIkkunaController implements Initializable {
     
     WeatherTracker weathertracker;
     private TextArea areaPaiva = new TextArea();
+    private Paiva paivaKohdalla;
+    private Saatila saa;
     
     /**
      * Aliohjelma joka ohjaa sivustolle jossa käyttöohjeet käyttöliittymälle
@@ -128,6 +134,7 @@ public class PaaIkkunaController implements Initializable {
         Dialogs.showMessageDialog("Tallennetetaan! Mutta ei toimi vielä");
     }
     
+    
     /**
      * Lisätään uusi päivämäärä tiedoilla näyttöön
      */
@@ -141,16 +148,26 @@ public class PaaIkkunaController implements Initializable {
             Dialogs.showMessageDialog("ongelmia uuden luomisessa " + e.getMessage());
             return;
         }
-        hae(uusi.getPvm());
+        hae(uusi.getTunnusNro());
         
     }
     
+    private void uusiSaa() {
+        if ( paivaKohdalla == null ) return;  
+        saa = new Saatila();   
+        saa.paivanSaa();  
+        weathertracker.lisaa(saa);
+        hae(paivaKohdalla.getTunnusNro());
+    }
+    
+
+
     /**
      * Tyhjennetään lista ja haetaan weathertracker luokalta päivämäärä
      * ja lisätään se seuraavaan indeksiin
      * @param pnro päivämäärän järjestysnumero
      */
-    private void hae(String pnro) {
+    private void hae(int pnro) {
         chooserPaivat.clear();
         
         int index = 0;
@@ -161,6 +178,7 @@ public class PaaIkkunaController implements Initializable {
         }
         chooserPaivat.setSelectedIndex(index);
     }
+
     
     /**
      * Alustetaan ja luodaan näyttöön uusi päivä
@@ -172,17 +190,21 @@ public class PaaIkkunaController implements Initializable {
         
         chooserPaivat.clear();
         chooserPaivat.addSelectionListener(e -> naytaPaiva());
+
     }
     
 
     private void naytaPaiva() {
-        Paiva paivaKohdalla = chooserPaivat.getSelectedObject();
+        paivaKohdalla = chooserPaivat.getSelectedObject();
         if ( paivaKohdalla == null) return;
         areaPaiva.setText("");
         try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaPaiva)) {
             paivaKohdalla.tulosta(os);
         }
     }
+    
+
+
     
     /**
      * Asetetaan controllerin weathertracker viite

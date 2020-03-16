@@ -6,6 +6,7 @@ package ht.wt;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author Joonas Uusi-Autti ja Sini Lällä
@@ -19,7 +20,7 @@ public class Saatilat implements Iterable<Saatila> {
     /**
      * Taulukko säätiloista
      */
-    private final Collection<Saatila> alkiot = new ArrayList<Saatila>();
+    private final ArrayList<Saatila> alkiot = new ArrayList<Saatila>();
     
     
     /**
@@ -35,6 +36,7 @@ public class Saatilat implements Iterable<Saatila> {
      */
     public void lisaa(Saatila saa) {
         alkiot.add(saa);
+        lkm++;
     }
     
     /**
@@ -49,6 +51,14 @@ public class Saatilat implements Iterable<Saatila> {
     public Iterator<Saatila> iterator() {
         return alkiot.iterator();
     }
+    
+    public List<Saatila> annaSaatilat(int i) {
+        List<Saatila> loydetyt = new ArrayList<Saatila>();
+        for (Saatila saa : alkiot)
+            if (saa.rand(0, 6) == lkm) loydetyt.add(saa);
+        
+        return loydetyt;
+    }
 
     /**
      * @param args ei käytössä
@@ -57,17 +67,19 @@ public class Saatilat implements Iterable<Saatila> {
         Saatilat saatilat = new Saatilat();
         Saatila aur = new Saatila();
         Saatila pilvi = new Saatila();
+
+        Saatila puolipilvi = new Saatila();
         Saatila sade = new Saatila();
         aur.paivanSaa();
         pilvi.paivanSaa();
+        puolipilvi.paivanSaa();
         sade.paivanSaa();
         
         saatilat.lisaa(aur);
         saatilat.lisaa(pilvi);
+        saatilat.lisaa(puolipilvi);
         saatilat.lisaa(sade);
     
     }
-
-
 
 }

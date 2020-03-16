@@ -51,7 +51,9 @@ public class WeatherTracker {
             Paiva paiva = weathertracker.annaPaiva(i);
             System.out.println("Päivämäärä: " + i);
             paiva.tulosta(System.out);
-            List<Saatila> loytyneet = weathertracker.annaSaatilat(paiva);
+            List<Saatila> loytyneet = weathertracker.annaSaatila(paiva);
+            for (Saatila saatila : loytyneet)
+                saatila.tulosta(System.out);
         }
         
         } catch (SailoException e) {
@@ -90,9 +92,8 @@ public class WeatherTracker {
     /**
      * Lisätään säätila
      * @param saatila lisätään
-     * @throws SailoException jos ei mahu
      */
-    public void lisaa(Saatila saatila) throws SailoException {
+    public void lisaa(Saatila saatila) {
         saatilat.lisaa(saatila); 
      }
     
@@ -103,7 +104,7 @@ public class WeatherTracker {
      * @return lista säätiloista
      */
     public List<Saatila> annaSaatila(Paiva paiva) {
-        saatilat.annaSaatila(paiva.getSaa()); //pitäsköhän olla joku tunnusnro...
+        return saatilat.annaSaatilat(paiva.getTunnusNro()); //pitäsköhän olla joku tunnusnro...
     }
     
     /**

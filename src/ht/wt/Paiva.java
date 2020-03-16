@@ -73,6 +73,7 @@ public class Paiva {
      * TODO: poista kun kun kaikki toimii
      */
     public void taytaPvmTiedoilla() {
+        getTunnusNro();
         pvm = arvoPaiva();
         paikka = "Jyväskylä " +rand(1, 310);
         kello = "10:29";
@@ -92,6 +93,11 @@ public class Paiva {
                 "°C" + ", ylin lämpötila " + String.format("%2.1f", ylinLampo) + 
                 "°C" + " ja sademäärä " + String.format("%2.1f", sademaara) + "mm");
         out.println("Huomiot: " + huomiot);
-    } 
+        out.println("Säätila : " + getTunnusNro());
+    }
+
+    public int getTunnusNro() {
+        return rand(0,6);
+    }
     
 }

@@ -20,7 +20,7 @@ public class Saatila {
      * @param yla arvonnan yläraja
      * @return satunnainen luku väliltä [ala, ylä]
      */
-    public static int rand(int ala, int yla) {
+    public int rand(int ala, int yla) {
         double n = (yla-ala)*Math.random() + ala;
         return (int)Math.round(n);
     }
@@ -30,12 +30,12 @@ public class Saatila {
      * TODO: poista kun kun kaikki toimii
      */
     public void paivanSaa() {
-        if (rand(0, 600) > 500) saatila = "aurinkoinen";
-        else if (rand(0, 600) > 400) saatila = "pilvinen";
-        else if (rand(0, 600) > 300) saatila = "puolipilvinen";
-        else if (rand(0, 600) > 200) saatila = "vesisade";
-        else if (rand(0, 600) > 100) saatila = "räntäsade";
-        else if (rand(0, 600) > 0) saatila = "lumisade";
+        if (rand(0, 6) > 5) saatila = "aurinkoinen";
+        else if (rand(0, 6) > 4) saatila = "pilvinen";
+        else if (rand(0, 6) > 3) saatila = "puolipilvinen";
+        else if (rand(0, 6) > 2) saatila = "vesisade";
+        else if (rand(0, 6) > 1) saatila = "räntäsade";
+        else if (rand(0, 6) > 0) saatila = "lumisade";
     }
     
     /**

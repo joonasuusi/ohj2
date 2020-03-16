@@ -25,16 +25,12 @@ public class Paivat {
         pvm.taytaPvmTiedoilla();
         pvm1.taytaPvmTiedoilla();
         
-        try {
-            paivat.lisaa(pvm);
-            paivat.lisaa(pvm1);
-            paivat.lisaa(pvm1);
-            paivat.lisaa(pvm1);
-            paivat.lisaa(pvm1);
-            paivat.lisaa(pvm1);
-        } catch (SailoException e) {
-            System.err.println(e.getMessage());
-        }
+        paivat.lisaa(pvm);
+        paivat.lisaa(pvm1);
+        paivat.lisaa(pvm1);
+        paivat.lisaa(pvm1);
+        paivat.lisaa(pvm1);
+        paivat.lisaa(pvm1);
 
         
             System.out.println("=============== Päivän sää ===============");
@@ -58,7 +54,6 @@ public class Paivat {
      * Lisää uuden päivämäärän tietorakenteeeseen.
      * Ottaa päivämäärän omistukseensa.
      * @param pvm Lisättävän päivämäärän viite. Huom. tietorakenne muuttuu omistajaksi.
-     * @throws SailoException Jos ei mahu
      * @example
      * <pre name="test">
      *  #THROWS SailoException 
@@ -79,8 +74,14 @@ public class Paivat {
      *  paivat.lisaa(pvm1); #THROWS SailoException
      * </pre>
      */
-    public void lisaa(Paiva pvm) throws SailoException {
-        if (lkm >= alkiot.length) throw new SailoException("Tee demot niin osaat tehä oikeasti tän");
+    public void lisaa(Paiva pvm) {
+        if (lkm >= alkiot.length) {
+            Paiva uusi[] = new Paiva[alkiot.length*2];
+            for (int i = 0; i < alkiot.length; i++) {
+                uusi[i] = alkiot[i];
+            }
+            alkiot = uusi;
+        }
         alkiot[lkm] = pvm;
         lkm++;
     }
