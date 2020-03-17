@@ -35,9 +35,7 @@ public class PaaIkkunaController implements Initializable {
 
     @FXML private Button textCancel;
     @FXML ListChooser<Paiva> chooserPaivat;
-    @FXML ListChooser<Saatila> chooserSaatilat;
     @FXML private ScrollPane panelPaiva;
-    @FXML private ScrollPane panelSaa;
     
     @Override
     public void initialize(URL url, ResourceBundle bundle) {
@@ -53,9 +51,9 @@ public class PaaIkkunaController implements Initializable {
     }
     
     @FXML private void handleSaatila() {
-        //ModalController.showModal(PaaIkkunaController.class.getResource("lisaaSaatila.fxml"),
-        //        "Muokkaa säätiloja", null, "");
-        uusiSaa();
+        ModalController.showModal(PaaIkkunaController.class.getResource("lisaaSaatila.fxml"),
+                "Muokkaa säätiloja", null, "");
+        //uusiSaa();
     }
     
     @FXML private void handlePoistaSaa() {
@@ -148,26 +146,25 @@ public class PaaIkkunaController implements Initializable {
             Dialogs.showMessageDialog("ongelmia uuden luomisessa " + e.getMessage());
             return;
         }
-        hae(uusi.getTunnusNro());
+        hae(uusi.getPvm());
         
     }
     
+    /*
     private void uusiSaa() {
         if ( paivaKohdalla == null ) return;  
         saa = new Saatila();   
         saa.paivanSaa();  
         weathertracker.lisaa(saa);
-        hae(paivaKohdalla.getTunnusNro());
     }
-    
-
+    */
 
     /**
      * Tyhjennetään lista ja haetaan weathertracker luokalta päivämäärä
      * ja lisätään se seuraavaan indeksiin
      * @param pnro päivämäärän järjestysnumero
      */
-    private void hae(int pnro) {
+    private void hae(String pnro) {
         chooserPaivat.clear();
         
         int index = 0;

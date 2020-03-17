@@ -79,6 +79,7 @@ public class Paiva {
         kello = "10:29";
         alinLampo = -2.2;
         ylinLampo = 3.3;
+        saatila = getTunnusNro();
         sademaara = 0.2;
         huomiot = "";
     }
@@ -93,7 +94,6 @@ public class Paiva {
                 "°C" + ", ylin lämpötila " + String.format("%2.1f", ylinLampo) + 
                 "°C" + " ja sademäärä " + String.format("%2.1f", sademaara) + "mm");
         out.println("Huomiot: " + huomiot);
-        out.println("Säätila : " + getTunnusNro());
     }
 
     public int getTunnusNro() {
