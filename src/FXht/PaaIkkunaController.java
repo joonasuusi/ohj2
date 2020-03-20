@@ -39,7 +39,6 @@ public class PaaIkkunaController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle bundle) {
-        // TODO Auto-generated method stub
         alusta();
     }
     
@@ -53,7 +52,6 @@ public class PaaIkkunaController implements Initializable {
     @FXML private void handleSaatila() {
         ModalController.showModal(PaaIkkunaController.class.getResource("lisaaSaatila.fxml"),
                 "Muokkaa säätiloja", null, "");
-        //uusiSaa();
     }
     
     @FXML private void handlePoistaSaa() {
@@ -129,7 +127,12 @@ public class PaaIkkunaController implements Initializable {
      * Aliohjelma joka tallentaa syötetyt tiedot
      */
     private void tallenna() {
-        Dialogs.showMessageDialog("Tallennetetaan! Mutta ei toimi vielä");
+        //Dialogs.showMessageDialog("Tallennetetaan! Mutta ei toimi vielä");
+        try {
+            weathertracker.tallenna();
+        } catch (SailoException e) {
+            Dialogs.showMessageDialog("Tallentamisessa tapahtui virhe: " + e.getMessage());
+        } 
     }
     
     
@@ -139,13 +142,7 @@ public class PaaIkkunaController implements Initializable {
     private void uusiPaiva() {
         Paiva uusi = new Paiva();
         uusi.taytaPvmTiedoilla(); // TODO: korvaa oikeasti dialogilla(se on jo) handleuudessa
-        
-        try {
-            weathertracker.lisaa(uusi);
-        } catch (SailoException e) {
-            Dialogs.showMessageDialog("ongelmia uuden luomisessa " + e.getMessage());
-            return;
-        }
+        weathertracker.lisaa(uusi);
         hae(uusi.getPvm());
         
     }
@@ -170,7 +167,7 @@ public class PaaIkkunaController implements Initializable {
         int index = 0;
         for (int i = 0; i < weathertracker.getPaivat(); i++) {
             Paiva paiva = weathertracker.annaPaiva(i);
-             if (paiva.getPvm().equals(pnro)) index = i;
+            if (paiva.getPvm().equals(pnro)) index = i;
             chooserPaivat.add(paiva.getPvm(), paiva);
         }
         chooserPaivat.setSelectedIndex(index);
@@ -200,7 +197,23 @@ public class PaaIkkunaController implements Initializable {
         }
     }
     
-
+    /**
+     * Luetaan tiedosto
+     * @return null jos onnistuu muuten virheteksti
+     */
+    protected String lueTiedostosta() {
+        try {
+            weathertracker.lueTiedostosta();
+            hae("0");
+            return null;
+        } catch (SailoException e) {
+            hae("0");
+            String virhe = e.getMessage();
+            if (virhe != null)
+                Dialogs.showMessageDialog(virhe);
+            return virhe;
+        }
+    }
 
     
     /**
@@ -210,6 +223,18 @@ public class PaaIkkunaController implements Initializable {
     public void setWeatherTracker(WeatherTracker weathertracker) {
         this.weathertracker = weathertracker;
         naytaPaiva();
+    }
+
+
+    /**
+     * Käyttäjälle avautuu aloitusikkuna, jossa hän voi päättää
+     * aloitetaanko ohjelman käyttäminen
+     * @return true jos aloitetaan käyttö, false jos ei
+     */
+    public boolean avaa() {
+        ModalController.showModal(PaaIkkunaController.class.getResource("aloitusikkuna.fxml"),
+                "WeatherTracker", null, "");
+        return true;
     }
 
 }

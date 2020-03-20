@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import ht.wt.WeatherTracker;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -33,11 +34,10 @@ public class Main extends Application {
 			primaryStage.setTitle("WeatherTracker");
 			
             WeatherTracker weathertracker = new WeatherTracker();
-            
-			primaryStage.show();
-			
 			paaCtrl.setWeatherTracker(weathertracker);
 			
+			primaryStage.show();
+            if(!paaCtrl.avaa()) Platform.exit();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

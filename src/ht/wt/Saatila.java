@@ -5,15 +5,40 @@ package ht.wt;
 
 import java.io.PrintStream;
 
-/**
+ /**
+ * Tietää säätilojen kentät.                   
+ * Osaa tarkistaa tietyn kentän oikeellisuuden (syntaksin)                                 
+ * Osaa muuttaa 3|Puolipilvinen -merkkijonon   säätilan tiedoiksi.                         
+ * Osaa antaa merkkijonona i:n kentän tiedot   
+ * Osaa laittaa merkkijonon i:neksi kentäksi
  * @author Joonas Uusi-Autti & Sini Lällä
  * @version 2.3.2020
  *
  */
 public class Saatila {
+    private static Saatila[] saa =  {
+            new Saatila (1, "aurinkoinen"), 
+            new Saatila (2, "pilvinen"), 
+            new Saatila (3, "puolipilvinen"),
+            new Saatila (4, "vesisade"), 
+            new Saatila (5, "räntäsade"), 
+            new Saatila (6, "lumisade")
+    };
     
     private String saatila = "";
+    private int id;
     
+    /**
+     * Alustetaan sää
+     * @param id säätilan id
+     * @param saa säätila
+     */
+    public Saatila(int id, String saa) {
+        this.id = id;
+        this.saatila = saa;
+    }
+
+
     /**
      * Arvotaan satunnainen kokonaisluku välille [ala, ylä]
      * @param ala arvonnan alaraja
@@ -25,45 +50,47 @@ public class Saatila {
         return (int)Math.round(n);
     }
     
+
     /**
-     * Apumetodi, jolla saadaan täytettyä testiarvot säätilalle
-     * TODO: poista kun kun kaikki toimii
+     * @return palauttaa säätilan id:n
      */
-    public void paivanSaa() {
-        if (rand(0, 6) > 5) saatila = "aurinkoinen";
-        else if (rand(0, 6) > 4) saatila = "pilvinen";
-        else if (rand(0, 6) > 3) saatila = "puolipilvinen";
-        else if (rand(0, 6) > 2) saatila = "vesisade";
-        else if (rand(0, 6) > 1) saatila = "räntäsade";
-        else if (rand(0, 6) > 0) saatila = "lumisade";
+    public String getSaatila() {
+        return saatila;
     }
+    
+    /**
+     * @return palauttaa säätilan id:n
+     */
+    public int getId() {
+        return id;
+    }
+    
     
     /**
      * Tulostetaan päivän tiedot
      * @param out mihin virtaa tulostetaan
      */
     public void tulosta(PrintStream out) {
-        out.println("Säätila: " + saatila);
-        
+        out.println("Säätila: " + saatila);    
     } 
 
     /**
      * @param args ei käytössä
      */
     public static void main(String[] args) {
-        Saatila aur = new Saatila();
-        Saatila pilvi = new Saatila();
-        Saatila sade = new Saatila();
-        Saatila lumi = new Saatila();
-        aur.paivanSaa();
-        pilvi.paivanSaa();
-        sade.paivanSaa();
-        lumi.paivanSaa();
-        
-        aur.tulosta(System.out);
-        pilvi.tulosta(System.out);
-        sade.tulosta(System.out);
-        lumi.tulosta(System.out);
+        //
     }
 
+    /**
+     * Haetaan numeroa vastaava säätilan arvo
+     * @param arpa arvottu numero
+     * @return numeroa vastaava säätila
+     */
+    public static String haeSaatila(int arpa) {
+        for (int i = 0; i < saa.length; i++) {
+            if (saa[i].getId() == arpa) 
+                return saa[i].getSaatila();
+        }
+        return "";
+    }
 }

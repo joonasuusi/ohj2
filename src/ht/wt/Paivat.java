@@ -3,8 +3,19 @@
  */
 package ht.wt;
 
-/**
- * TODO: crc-kortin tiedot Paivat
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.Scanner;
+
+ /**
+ * Pitää yllä varsinaista paivarekisteriä eli osaa lisätä ja poistaa päivän                         
+ * Lukee ja kirjoittaa paivan tiedostoon            
+ * Osaa etsiä ja lajitella
+ * Avustaja: Paiva     
  * @author Joonas Uusi-Autti & Sini Lällä
  * @version 27.2.2020
  *
@@ -56,7 +67,6 @@ public class Paivat {
      * @param pvm Lisättävän päivämäärän viite. Huom. tietorakenne muuttuu omistajaksi.
      * @example
      * <pre name="test">
-     *  #THROWS SailoException 
      *  Paivat paivat = new Paivat();
      *  Paiva pvm = new Paiva(), pvm1 = new Paiva();
      *  paivat.getLkm() === 0;
@@ -71,7 +81,7 @@ public class Paivat {
      *  paivat.anna(3) === pvm; #THROWS IndexOutOfBoundsException
      *  paivat.lisaa(pvm1); paivat.getLkm() === 4;
      *  paivat.lisaa(pvm1); paivat.getLkm() === 5;
-     *  paivat.lisaa(pvm1); #THROWS SailoException
+     *  paivat.lisaa(pvm1); paivat.getLkm() === 6;
      * </pre>
      */
     public void lisaa(Paiva pvm) {
@@ -97,4 +107,53 @@ public class Paivat {
         return alkiot[i];
     }
 
+    /**
+     * Haetaan numeroa vastaava säätilan arvo
+     * @param arpa arvottu numero
+     * @return numeroa vastaava säätila
+     */
+    public static String haeSaatila(int arpa) {
+        return WeatherTracker.haeSaatila(arpa);
+    }
+
+    
+    /**
+     * Tallennetaan paivatiedosto
+     * @throws SailoException jos tiedosto ei aukea
+     */
+    public void tallenna() throws SailoException {
+        try (PrintStream fo = new PrintStream(new FileOutputStream("paivat.dat", true))) {
+            //fo.println("WeatherTracker"); ei välttämättä tarvitse tai tulostuu joka kerta kun tallennetaan
+            for (int i = 0; i < getLkm(); i++) {
+                Paiva paiva = anna(i);
+                fo.println(paiva.toString());
+            }
+        } catch (FileNotFoundException e) {
+            throw new SailoException("Tiedosto ei aukea " + e.getMessage());
+        } //catch (IOException e ) {
+            //throw new SailoException("Tiedoston kirjoittamisessa on ongelmia " + e.getMessage());
+        //}  //TODO: mikä vika tässä?           
+    }
+
+    /**
+     * Luetaan paivatiedosto
+     * @throws SailoException jos tiedosto ei auke
+     */
+    public void lueTiedostosta() throws SailoException {
+        try (Scanner fi = new Scanner(new FileInputStream(new File("paivat.dat")))) {
+          while ( fi.hasNext()) {
+              String rivi = fi.nextLine();
+              rivi = rivi.trim();
+              if ("".equals(rivi) || rivi.charAt(0) == ';') continue; //tarvitaanko?
+              Paiva paiva = new Paiva();
+              paiva.parse(rivi);
+              lisaa(paiva);
+          }
+        } catch (FileNotFoundException e) {
+            throw new SailoException("Tiedosto ei aukea " + e.getMessage());
+        } //catch (IOException e ) {
+            //throw new SailoException("Tiedoston kirjoittamisessa on ongelmia " + e.getMessage());
+        //}
+   
+    }
 }

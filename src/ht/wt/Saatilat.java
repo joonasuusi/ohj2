@@ -8,7 +8,11 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-/**
+ /**
+ * Pitää yllä varsinaista saatilarekisteria eli osaa lisätä ja poistaa säätilan               
+ * Lukee ja kirjoittaa saatila tiedostoon        
+ * Osaa etsiä ja lajitella
+ * Avustaja: Saatila
  * @author Joonas Uusi-Autti ja Sini Lällä
  * @version 2.3.2020
  *
@@ -52,34 +56,26 @@ public class Saatilat implements Iterable<Saatila> {
         return alkiot.iterator();
     }
     
-    public List<Saatila> annaSaatilat(int i) {
-        List<Saatila> loydetyt = new ArrayList<Saatila>();
-        for (Saatila saa : alkiot)
-            if (saa.rand(0, 6) == lkm) loydetyt.add(saa);
-        
-        return loydetyt;
-    }
 
     /**
      * @param args ei käytössä
      */
-    public static void main(String[] args) {
-        Saatilat saatilat = new Saatilat();
-        Saatila aur = new Saatila();
-        Saatila pilvi = new Saatila();
-
-        Saatila puolipilvi = new Saatila();
-        Saatila sade = new Saatila();
-        aur.paivanSaa();
-        pilvi.paivanSaa();
-        puolipilvi.paivanSaa();
-        sade.paivanSaa();
-        
-        saatilat.lisaa(aur);
-        saatilat.lisaa(pilvi);
-        saatilat.lisaa(puolipilvi);
-        saatilat.lisaa(sade);
+    public static void main(String[] args) {;
+        //
     
     }
 
+    /**
+     * Haetaan numeroa vastaava säätilan arvo
+     * @param arpa arvottu numero
+     * @return numeroa vastaava säätila
+     */
+    public static String haeSaatila(int arpa) {
+        return Saatila.haeSaatila(arpa);
+    }
+
+    public void tallenna() {
+        // TODO Auto-generated method stub
+        
+    }
 }

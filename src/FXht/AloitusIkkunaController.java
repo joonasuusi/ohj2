@@ -11,6 +11,7 @@ import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.ModalControllerInterface;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 
@@ -20,12 +21,15 @@ import javafx.stage.Stage;
  *
  */
 public class AloitusIkkunaController implements ModalControllerInterface<String> {
+    @FXML private Button textCancel;
+    @FXML private Button textAvaa;
+    
     @FXML private void handleAloita() {
-        ModalController.showModal(AloitusIkkunaController.class.getResource("paaikkuna.fxml"),
-                "Tarkastele", null, "");
+        ModalController.closeStage(textAvaa);
     }
 
     @FXML private void handleLopeta() {
+        ModalController.closeStage(textCancel);
         Platform.exit();
     }
     
@@ -59,7 +63,7 @@ public class AloitusIkkunaController implements ModalControllerInterface<String>
 
     @Override
     public void handleShown() {
-        // TODO Auto-generated method stub
+        //
         
     }
 
