@@ -23,6 +23,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -36,6 +37,11 @@ public class PaaIkkunaController implements Initializable {
     @FXML private Button textCancel;
     @FXML ListChooser<Paiva> chooserPaivat;
     @FXML private ScrollPane panelPaiva;
+    
+    @FXML private TextField editPvm;
+    @FXML private TextField editPaikka;
+    @FXML private TextField editKello;
+    @FXML private TextField editAlinLampo;
     
     @Override
     public void initialize(URL url, ResourceBundle bundle) {
@@ -201,6 +207,11 @@ public class PaaIkkunaController implements Initializable {
     private void naytaPaiva() {
         paivaKohdalla = chooserPaivat.getSelectedObject();
         if ( paivaKohdalla == null) return;
+        editPvm.setText(paivaKohdalla.getPvm());
+        editPaikka.setText(paivaKohdalla.getPaikka());
+        editKello.setText(paivaKohdalla.getKello());
+        editAlinLampo.setText(String.valueOf(paivaKohdalla.getAlinLampo()));
+        
         //areaPaiva.setText("");
         //try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaPaiva)) {
         //    paivaKohdalla.tulosta(os);
