@@ -3,7 +3,6 @@ package FXht;
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.ModalControllerInterface;
-import fi.jyu.mit.ohj2.Mjonot;
 import ht.wt.SailoException;
 import ht.wt.WeatherTracker;
 import javafx.fxml.FXML;

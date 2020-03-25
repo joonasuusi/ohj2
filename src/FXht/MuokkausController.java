@@ -3,9 +3,13 @@ package FXht;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import fi.jyu.mit.fxgui.ComboBoxChooser;
+import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.ModalControllerInterface;
 import ht.wt.Paiva;
+import ht.wt.SailoException;
+import ht.wt.WeatherTracker;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -18,18 +22,21 @@ import javafx.stage.Stage;
  * @version 24.3.2020
  *
  */
-public class paivaController implements ModalControllerInterface<Paiva>, Initializable {
+public class MuokkausController implements ModalControllerInterface<Paiva>, Initializable {
+    
     @FXML private TextField editPvm;
     @FXML private TextField editPaikka;
     @FXML private TextField editKello;
     @FXML private TextField editAlinLampo;
     @FXML private Button textCancel;
+    @FXML private ComboBoxChooser<String> saatilaValikko;
     
     @FXML private void handleTallenna() {
         ModalController.closeStage(textCancel);
         //tallenna();
     }
     
+
     @FXML private void handleCancel() {
         ModalController.closeStage(textCancel);
     }
@@ -37,6 +44,7 @@ public class paivaController implements ModalControllerInterface<Paiva>, Initial
     //=========================== omia koodeja ==========================
     private Paiva paivaKohdalla;
     private TextField[] edits;
+    WeatherTracker weathertracker;
     
     @Override
     public void handleShown() {
@@ -102,7 +110,8 @@ public class paivaController implements ModalControllerInterface<Paiva>, Initial
      * @return null, jos painetaan Cancel, muuten täytetty tietue
      */
       public static Paiva kysyPaiva(Stage modalityStage, Paiva oletus) {
-          return ModalController.showModal(PaaIkkunaController.class.getResource("muokkausikkuna.fxml"), "Muokkaa", modalityStage, oletus, null);
-      } //onko PaaIkkunaController vrt vesalla paivaController tässä
+          return ModalController.showModal(MuokkausController.class.getResource("muokkausikkuna.fxml"), 
+                  "Muokkaa", modalityStage, oletus, null);
+      } 
     
     }

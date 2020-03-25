@@ -39,6 +39,7 @@ public class Saatila {
         this.saatila = saa;
     }
     
+    
     @Override
     public String toString() {
         return "" + 
@@ -66,6 +67,7 @@ public class Saatila {
         return saatila;
     }
     
+    
     /**
      * @return palauttaa säätilan id:n
      */
@@ -83,6 +85,7 @@ public class Saatila {
         out.println("Säätila: " + saatila);    
     } 
 
+    
     /**
      * @param args ei käytössä
      */
@@ -90,6 +93,7 @@ public class Saatila {
         //
     }
 
+    
     /**
      * Haetaan numeroa vastaava säätilan arvo
      * @param arpa arvottu numero

@@ -84,14 +84,14 @@
                         <Insets left="10.0" right="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <TextField fx:id="editPvm" prefWidth="300.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
-                  <TextField fx:id="editPaikka" prefWidth="300.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
-                  <TextField fx:id="editKello" prefWidth="300.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
-                  <TextField prefWidth="300.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" />
-                  <TextField prefWidth="300.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" />
-                  <TextField prefWidth="300.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="6" />
+                  <TextField fx:id="editPvm" editable="false" prefWidth="300.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
+                  <TextField fx:id="editPaikka" editable="false" prefWidth="300.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
+                  <TextField fx:id="editKello" editable="false" prefWidth="300.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
+                  <TextField editable="false" prefWidth="300.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" />
+                  <TextField editable="false" prefWidth="300.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" />
+                  <TextField editable="false" prefWidth="300.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="6" />
                   <TextField GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                  <TextField prefWidth="300.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="7" />
+                  <TextField editable="false" prefWidth="300.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="7" />
                   <TextField editable="false" prefWidth="300.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="8" />
                   <Label text=" °C" GridPane.columnIndex="2" GridPane.rowIndex="3">
                      <GridPane.margin>
@@ -113,7 +113,7 @@
                         <Insets left="5.0" />
                      </GridPane.margin>
                   </Label>
-                  <TextField fx:id="editAlinLampo" prefWidth="300.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
+                  <TextField fx:id="editAlinLampo" editable="false" prefWidth="300.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
                </children>
                <padding>
                   <Insets left="10.0" right="10.0" top="10.0" />

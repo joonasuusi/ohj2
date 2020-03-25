@@ -7,9 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
  /**
  * Pitää yllä varsinaista saatilarekisteria eli osaa lisätä ja poistaa säätilan               
@@ -37,6 +35,7 @@ public class Saatilat implements Iterable<Saatila> {
         // toistaiseksi ei tartte tehä mitää
     }
     
+    
     /**
      * Lisää uuden säätilan tietorakenteeseen
      * @param saa lisättävä säätila
@@ -46,6 +45,7 @@ public class Saatilat implements Iterable<Saatila> {
         lkm++;
     }
     
+    
     /**
      * Palauttaa säätilojen lukumäärän
      * @return säätilojen lukumäärä
@@ -53,6 +53,7 @@ public class Saatilat implements Iterable<Saatila> {
     public int getLkm() {
         return alkiot.size();
     }
+    
     
     @Override
     public Iterator<Saatila> iterator() {
@@ -65,9 +66,9 @@ public class Saatilat implements Iterable<Saatila> {
      */
     public static void main(String[] args) {;
         //
-    
     }
 
+    
     /**
      * Haetaan numeroa vastaava säätilan arvo
      * @param arpa arvottu numero
@@ -77,6 +78,7 @@ public class Saatilat implements Iterable<Saatila> {
         return Saatila.haeSaatila(arpa);
     }
 
+    
     /**
      *  Tallennetaan säätilat tiedostoon
      * @throws SailoException jos tiedosto ei aukea

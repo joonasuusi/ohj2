@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Scanner;
 
@@ -55,6 +54,7 @@ public class Paivat {
             }
         }
 
+    
     /**
      * Palauttaa päivien lukumäärän
      * @return päivien lukumäärä
@@ -63,6 +63,7 @@ public class Paivat {
         return lkm;
     }
 
+    
     /**
      * 
      * Lisää uuden päivämäärän tietorakenteeeseen.
@@ -99,6 +100,7 @@ public class Paivat {
         lkm++;
     }
 
+    
     /**
      * Palauttaa viitteen i:teen päivämäärään
      * @param i monennenko päivämäärän viite halutaan
@@ -110,6 +112,7 @@ public class Paivat {
         return alkiot[i];
     }
 
+    
     /**
      * Haetaan numeroa vastaava säätilan arvo
      * @param arpa arvottu numero
@@ -138,6 +141,7 @@ public class Paivat {
         //}  //TODO: mikä vika tässä?           
     }
 
+    
     /**
      * Luetaan paivatiedosto
      * @throws SailoException jos tiedosto ei auke
@@ -157,6 +161,5 @@ public class Paivat {
         } //catch (IOException e ) {
             //throw new SailoException("Tiedoston kirjoittamisessa on ongelmia " + e.getMessage());
         //}
-   
     }
 }

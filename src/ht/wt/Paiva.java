@@ -65,6 +65,7 @@ public class Paiva {
         return alinLampo;
     }
     
+    
     /**
      * Palauttaa päivän tiedot merkkijonona, jonka voi tallentaa tiedostoon.
      * @return päivä tolppaeroteltuna merkkijonona
@@ -89,6 +90,7 @@ public class Paiva {
                 huomiot + "|";
     }
     
+    
     /**
      * @param rivi rivi jota luetaan TODO: tarvitaanko setTunnsNro?
      */
@@ -104,6 +106,7 @@ public class Paiva {
         sademaara = Mjonot.erota(sb, '|', sademaara);
         huomiot = Mjonot.erota(sb, '|', huomiot); 
     }
+    
     
     /**
      * @param args ei käytössä
@@ -123,10 +126,8 @@ public class Paiva {
         
         pvm2.rekisteroi();
         pvm2.taytaPvmTiedoilla();
-        pvm2.tulosta(System.out);
-        
+        pvm2.tulosta(System.out); 
     }
-    
     
     
     /**
@@ -156,6 +157,7 @@ public class Paiva {
         huomiot = "";
     }
     
+    
     /**
      * Antaa päivälle seuraaavan rekisterinumeron
      * @return päivän uusi tunnusnumero
@@ -177,6 +179,7 @@ public class Paiva {
         return tunnusNro;
     }
     
+    
     /**
      * 
      * @return palauttaa päivän tunnusnumeron
@@ -197,6 +200,7 @@ public class Paiva {
             seuraavaNro = tunnusNro+1;
     }
 
+    
     /**
      * Haetaan numeroa vastaava säätilan arvo
      * @param arpa arvottu numero
@@ -206,6 +210,7 @@ public class Paiva {
         return Paivat.haeSaatila(arpa);
     }
 
+    
     /**
      * Tulostetaan päivän tiedot
      * @param out mihin virtaa tulostetaan
@@ -219,8 +224,4 @@ public class Paiva {
         out.println("Huomiot: " + huomiot);
         out.println("Säätila: " + saatila);
     }
-
-   
-
-
 }

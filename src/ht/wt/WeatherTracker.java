@@ -43,7 +43,6 @@ public class WeatherTracker {
      //   } catch (SailoException e) {
        //     System.err.println(e.getMessage());
         //}
-        
     }
     
     
@@ -70,6 +69,7 @@ public class WeatherTracker {
     public void lisaa(Paiva paiva) {
        paivat.lisaa(paiva); 
     }
+    
     
     /**
      * Lisätään säätila
@@ -99,6 +99,7 @@ public class WeatherTracker {
         return paivat.anna(i);
     }
 
+    
     /**
      * Haetaan numeroa vastaava säätilan arvo
      * @param arpa arvottu numero
@@ -136,7 +137,6 @@ public class WeatherTracker {
      */
     public void lueTiedostosta() throws SailoException {
         paivat.lueTiedostosta();
-        //saatilat.lueTiedostosta();
-        
+        //saatilat.lueTiedostosta();    
     }
 }

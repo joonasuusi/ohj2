@@ -39,7 +39,7 @@ public class PaaIkkunaController implements Initializable {
         // ModalController.showModal(PaaIkkunaController.class.getResource("lisaysikkuna.fxml"),
            //     "Lisää uusi", null, "");
         uusiPaiva();
-    }
+    } 
     
     @FXML private void handleSaatila() {
         ModalController.showModal(PaaIkkunaController.class.getResource("lisaaSaatila.fxml"),
@@ -80,6 +80,7 @@ public class PaaIkkunaController implements Initializable {
     @FXML private void handlePoista() {
         boolean vastaus = Dialogs.showQuestionDialog("Poistetaanko?",
                 "Poistetaanko päivämäärä " + chooserPaivat.getSelectedText().toString(), "Kyllä", "Ei");
+        if(vastaus == true) Dialogs.showMessageDialog("Ei osata vielä poistaa");
         // if (vastaus) poistaPvm(true)
     }
 
@@ -121,6 +122,7 @@ public class PaaIkkunaController implements Initializable {
             return;
         }
     }
+    
     
     /**
      * Aliohjelma joka tallentaa syötetyt tiedot
@@ -189,8 +191,9 @@ public class PaaIkkunaController implements Initializable {
     
     private void muokkaa() {
         //ModalController.showModal(PaaIkkunaController.class.getResource("muokkausikkuna.fxml"), "Muokkaa", null, "");
-        paivaController.kysyPaiva(null, paivaKohdalla);
+        MuokkausController.kysyPaiva(null, paivaKohdalla);
     }
+    
     
     /**
      * "Tulostaa" näyttöön päivän tiedot
@@ -199,7 +202,7 @@ public class PaaIkkunaController implements Initializable {
         paivaKohdalla = chooserPaivat.getSelectedObject();
         if ( paivaKohdalla == null) return;
         
-        paivaController.naytaPaiva(edits, paivaKohdalla);
+        MuokkausController.naytaPaiva(edits, paivaKohdalla);
         
         //editPvm.setText(paivaKohdalla.getPvm());
         //editPaikka.setText(paivaKohdalla.getPaikka());
@@ -211,6 +214,7 @@ public class PaaIkkunaController implements Initializable {
         //    paivaKohdalla.tulosta(os);
         //}
     }
+    
     
     /**
      * Luetaan tiedosto
@@ -252,5 +256,4 @@ public class PaaIkkunaController implements Initializable {
         lueTiedostosta();
         return true;
     }
-
 }
