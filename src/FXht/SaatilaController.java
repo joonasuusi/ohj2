@@ -3,6 +3,9 @@ package FXht;
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.ModalControllerInterface;
+import fi.jyu.mit.ohj2.Mjonot;
+import ht.wt.SailoException;
+import ht.wt.WeatherTracker;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -16,7 +19,7 @@ public class SaatilaController implements ModalControllerInterface<String> {
     
     @FXML private Button textCancel;
     
-    @FXML private TextField saaNro;
+    @FXML private TextField saaLisays;
     
     @FXML private void handleTallenna() {
         tallenna();
@@ -44,8 +47,25 @@ public class SaatilaController implements ModalControllerInterface<String> {
         
     }
     
+    // ================= omat koodit ===============
+    WeatherTracker weathertracker;
+
+    
     private void tallenna() {
-        Dialogs.showMessageDialog("Tallennetetaan! Mutta ei toimi vielä");
+        //Dialogs.showMessageDialog("Tallennetetaan! Mutta ei toimi vielä");
+        try {
+            weathertracker.tallenna();
+        } catch (SailoException e) {
+            Dialogs.showMessageDialog("Tallentamisessa tapahtui virhe: " + e.getMessage());
+        } 
+    }
+    
+    /**
+     * Asetetaan controllerin weathertracker viite
+     * @param weathertracker mihin viitataan
+     */
+    public void setWeatherTracker(WeatherTracker weathertracker) {
+        this.weathertracker = weathertracker;
     }
 
 }

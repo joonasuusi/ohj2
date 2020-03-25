@@ -65,8 +65,7 @@ public class PaaIkkunaController implements Initializable {
     }
     
     @FXML private void handleMuokkaa() {
-        ModalController.showModal(PaaIkkunaController.class.getResource("muokkausikkuna.fxml"),
-                "Muokkaa", null, "");
+        muokkaa();
     }
 
     @FXML private void handleTallenna() {
@@ -88,7 +87,7 @@ public class PaaIkkunaController implements Initializable {
     
     @FXML private void handlePoista() {
         boolean vastaus = Dialogs.showQuestionDialog("Poistetaanko?",
-                "Poistetaanko päivämäärä: 12.3.2020", "Kyllä", "Ei");
+                "Poistetaanko päivämäärä " + chooserPaivat.getSelectedText().toString(), "Kyllä", "Ei");
         // if (vastaus) poistaPvm(true)
     }
 
@@ -97,6 +96,9 @@ public class PaaIkkunaController implements Initializable {
         ModalController.closeStage(textCancel);
     }
     
+    /**
+     * Onko sama kkuin tallennna metodi???
+     */
     @FXML private void handleOK() {
         tallenna();
     }
@@ -104,7 +106,7 @@ public class PaaIkkunaController implements Initializable {
     // =============== omat koodit ===============
     
     WeatherTracker weathertracker;
-    private TextArea areaPaiva = new TextArea();
+    //private TextArea areaPaiva = new TextArea();
     private Paiva paivaKohdalla;
     private Saatila saa;
     
@@ -143,7 +145,7 @@ public class PaaIkkunaController implements Initializable {
         Paiva uusi = new Paiva();
         uusi.taytaPvmTiedoilla(); // TODO: korvaa oikeasti dialogilla(se on jo) handleuudessa
         weathertracker.lisaa(uusi);
-        hae(uusi.getPvm());
+        hae(uusi.getTunnusNro());
         
     }
     
@@ -161,13 +163,13 @@ public class PaaIkkunaController implements Initializable {
      * ja lisätään se seuraavaan indeksiin
      * @param pnro päivämäärän järjestysnumero
      */
-    private void hae(String pnro) {
+    private void hae(int pnro) {
         chooserPaivat.clear();
         
         int index = 0;
         for (int i = 0; i < weathertracker.getPaivat(); i++) {
             Paiva paiva = weathertracker.annaPaiva(i);
-            if (paiva.getPvm().equals(pnro)) index = i;
+            if (paiva.getTunnusNro() == pnro) index = i;
             chooserPaivat.add(paiva.getPvm(), paiva);
         }
         chooserPaivat.setSelectedIndex(index);
@@ -178,8 +180,8 @@ public class PaaIkkunaController implements Initializable {
      * Alustetaan ja luodaan näyttöön uusi päivä
      */
     private void alusta() {
-        panelPaiva.setContent(areaPaiva);
-        areaPaiva.setFont(new Font("Courier New", 12));
+        //panelPaiva.setContent(areaPaiva);
+        //areaPaiva.setFont(new Font("Courier New", 12));
         panelPaiva.setFitToHeight(true);
         
         chooserPaivat.clear();
@@ -187,14 +189,22 @@ public class PaaIkkunaController implements Initializable {
 
     }
     
-
+    
+    private void muokkaa() {
+        //ModalController.showModal(PaaIkkunaController.class.getResource("muokkausikkuna.fxml"), "Muokkaa", null, "");
+        paivaController.kysyPaiva(null, paivaKohdalla);
+    }
+    
+    /**
+     * "Tulostaa" näyttöön päivän tiedot
+     */
     private void naytaPaiva() {
         paivaKohdalla = chooserPaivat.getSelectedObject();
         if ( paivaKohdalla == null) return;
-        areaPaiva.setText("");
-        try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaPaiva)) {
-            paivaKohdalla.tulosta(os);
-        }
+        //areaPaiva.setText("");
+        //try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaPaiva)) {
+        //    paivaKohdalla.tulosta(os);
+        //}
     }
     
     /**
@@ -204,10 +214,10 @@ public class PaaIkkunaController implements Initializable {
     protected String lueTiedostosta() {
         try {
             weathertracker.lueTiedostosta();
-            hae("0");
+            hae(0);
             return null;
         } catch (SailoException e) {
-            hae("0");
+            hae(0);
             String virhe = e.getMessage();
             if (virhe != null)
                 Dialogs.showMessageDialog(virhe);
@@ -234,6 +244,7 @@ public class PaaIkkunaController implements Initializable {
     public boolean avaa() {
         ModalController.showModal(PaaIkkunaController.class.getResource("aloitusikkuna.fxml"),
                 "WeatherTracker", null, "");
+        lueTiedostosta();
         return true;
     }
 

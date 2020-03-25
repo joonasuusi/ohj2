@@ -16,6 +16,7 @@ import java.io.PrintStream;
  *
  */
 public class Saatila {
+   
     private static Saatila[] saa =  {
             new Saatila (1, "aurinkoinen"), 
             new Saatila (2, "pilvinen"), 
@@ -26,7 +27,7 @@ public class Saatila {
     };
     
     private String saatila = "";
-    private int id;
+    private int id = 0;
     
     /**
      * Alustetaan sää
@@ -36,6 +37,13 @@ public class Saatila {
     public Saatila(int id, String saa) {
         this.id = id;
         this.saatila = saa;
+    }
+    
+    @Override
+    public String toString() {
+        return "" + 
+                getId() + "|" +
+                saatila + "|";
     }
 
 
@@ -52,7 +60,7 @@ public class Saatila {
     
 
     /**
-     * @return palauttaa säätilan id:n
+     * @return palauttaa säätilan
      */
     public String getSaatila() {
         return saatila;
@@ -62,6 +70,7 @@ public class Saatila {
      * @return palauttaa säätilan id:n
      */
     public int getId() {
+        id++;
         return id;
     }
     

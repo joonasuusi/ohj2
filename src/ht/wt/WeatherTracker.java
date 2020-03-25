@@ -25,6 +25,8 @@ public class WeatherTracker {
         
        // try {
         Paiva pvm = new Paiva(), pvm1 = new Paiva();
+        pvm.rekisteroi();
+        pvm1.rekisteroi();
         pvm.taytaPvmTiedoilla();
         pvm1.taytaPvmTiedoilla();
     
@@ -118,13 +120,11 @@ public class WeatherTracker {
         } catch (SailoException e) {
             virhe += e.getMessage();
         }
-        /*
         try {
-         // saatilat.tallenna(); //TODO: muista tehdä
+            saatilat.tallenna(); //TODO: muista tehdä
         } catch (SailoException e) {
             virhe += e.getMessage();;
         }
-        */
         if (virhe.length() > 0 )
             throw new SailoException(virhe);
     }

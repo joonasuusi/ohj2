@@ -18,6 +18,8 @@ import static kanta.PaivaLuonti.*;
  */
 public class Paiva {
     
+    private int tunnusNro;
+    private static int seuraavaNro = 1;
     private String pvm = "";
     private String paikka = "";
     private String kello = "";
@@ -36,19 +38,47 @@ public class Paiva {
         return pvm;
     }
     
+    
+    /**
+     * Hakee paikan
+     * @return palauttaa paikan
+     */
+    public String getPaikka() {
+        return paikka;
+    } 
+    
+ 
+    /**
+     * Hakee kellonajan
+     * @return palauttaa kellonajan
+     */
+    public String getKello() {
+        return kello;
+    }
+    
+    
+    /**
+     * Hakee alimman lämpötilan
+     * @return palauttaa alimman lämpötilan
+     */
+    public double getAlinLampo() {
+        return alinLampo;
+    }
+    
     /**
      * Palauttaa päivän tiedot merkkijonona, jonka voi tallentaa tiedostoon.
      * @return päivä tolppaeroteltuna merkkijonona
      * @example
      * <pre name="test">
      * Paiva paiva = new Paiva();
-     * paiva.parse("    12.3.2020   |   Orivesi       |  07:18");
-     * paiva.toString().startsWith("12.3.2020|Orivesi|07:18|") === true;
+     * paiva.parse("3  |    12.3.2020   |   Orivesi       |  07:18");
+     * paiva.toString().startsWith("3|12.3.2020|Orivesi|07:18|") === true;
      * </pre>
      */
     @Override
     public String toString() {
         return "" + 
+                getTunnusNro() + "|" +
                 pvm + "|" +
                 paikka + "|" +
                 kello + "|" +
@@ -64,6 +94,7 @@ public class Paiva {
      */
     public void parse(String rivi) {
         StringBuilder sb = new StringBuilder(rivi);
+        setTunnusNro(Mjonot.erota(sb, '|', getTunnusNro()));
         pvm = Mjonot.erota(sb, '|', pvm);
         paikka = Mjonot.erota(sb, '|', paikka);
         kello = Mjonot.erota(sb, '|', kello);
@@ -82,12 +113,15 @@ public class Paiva {
         Paiva pvm1 = new Paiva();
         Paiva pvm2 = new Paiva();
         
+        pvm.rekisteroi();
         pvm.taytaPvmTiedoilla();
         pvm.tulosta(System.out);
         
+        pvm1.rekisteroi();
         pvm1.taytaPvmTiedoilla();
         pvm1.tulosta(System.out);
         
+        pvm2.rekisteroi();
         pvm2.taytaPvmTiedoilla();
         pvm2.tulosta(System.out);
         
@@ -121,6 +155,47 @@ public class Paiva {
         sademaara = 0.2;
         huomiot = "";
     }
+    
+    /**
+     * Antaa päivälle seuraaavan rekisterinumeron
+     * @return päivän uusi tunnusnumero
+     * @example
+     * <pre name="test">
+     * Paiva paiva1 = new Paiva();
+     * paiva1.getTunnusNro() === 0;
+     * paiva1.rekisteroi();
+     * Paiva paiva2 = new Paiva();
+     * paiva2.rekisteroi();
+     * int n1 = paiva1.getTunnusNro();
+     * int n2 = paiva2.getTunnusNro();
+     * n1 === n2-1;
+     * </pre>
+     */
+    public int rekisteroi() {
+        tunnusNro = seuraavaNro;
+        seuraavaNro++;
+        return tunnusNro;
+    }
+    
+    /**
+     * 
+     * @return palauttaa päivän tunnusnumeron
+     */
+    public int getTunnusNro() {
+        return tunnusNro;
+    }
+    
+    
+    /**
+     * asettaa tunnusnron ja samalla varmistaa että
+     * seuraava on numero on aina suurempi kuin tähän mennessä suurin
+     * @param nro asetettava tunnusnrro
+     */
+    public void setTunnusNro(int nro) {
+        tunnusNro = nro;
+        if (tunnusNro >= seuraavaNro)
+            seuraavaNro = tunnusNro+1;
+    }
 
     /**
      * Haetaan numeroa vastaava säätilan arvo
@@ -136,11 +211,16 @@ public class Paiva {
      * @param out mihin virtaa tulostetaan
      */
     public void tulosta(PrintStream out) {
+        out.println(String.format("%03d", tunnusNro));
         out.println(pvm +  ", " + paikka + ", " + kello);
         out.println("Päivän alin lämpötila " + String.format("%2.1f", alinLampo) + 
                 "°C" + ", ylin lämpötila " + String.format("%2.1f", ylinLampo) + 
                 "°C" + " ja sademäärä " + String.format("%2.1f", sademaara) + "mm");
         out.println("Huomiot: " + huomiot);
         out.println("Säätila: " + saatila);
-    } 
+    }
+
+   
+
+
 }

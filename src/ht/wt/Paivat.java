@@ -33,6 +33,9 @@ public class Paivat {
     public static void main(String[] args) {
         Paivat paivat = new Paivat();
         Paiva pvm = new Paiva(), pvm1 = new Paiva();
+        
+        pvm.rekisteroi();
+        pvm1.rekisteroi();
         pvm.taytaPvmTiedoilla();
         pvm1.taytaPvmTiedoilla();
         
@@ -122,7 +125,7 @@ public class Paivat {
      * @throws SailoException jos tiedosto ei aukea
      */
     public void tallenna() throws SailoException {
-        try (PrintStream fo = new PrintStream(new FileOutputStream("paivat.dat", true))) {
+        try (PrintStream fo = new PrintStream(new FileOutputStream("paivat.dat", false))) {
             //fo.println("WeatherTracker"); ei välttämättä tarvitse tai tulostuu joka kerta kun tallennetaan
             for (int i = 0; i < getLkm(); i++) {
                 Paiva paiva = anna(i);
