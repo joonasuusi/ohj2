@@ -13,6 +13,7 @@ import ht.wt.WeatherTracker;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -29,16 +30,21 @@ public class MuokkausController implements ModalControllerInterface<Paiva>, Init
     @FXML private TextField editKello;
     @FXML private TextField editAlinLampo;
     @FXML private Button textCancel;
+    @FXML private Label labelVirhe;
     @FXML private ComboBoxChooser<String> saatilaValikko;
     
     @FXML private void handleTallenna() {
-        ModalController.closeStage(textCancel);
-        //tallenna();
+        if (paivaKohdalla != null && paivaKohdalla.getPvm().trim().equals("")) {
+            naytaVirhe("Päivämäärä ei saa olla tyhjä");
+            return;
+        }
+        ModalController.closeStage(labelVirhe);
     }
     
 
     @FXML private void handleCancel() {
-        ModalController.closeStage(textCancel);
+        paivaKohdalla = null;
+        ModalController.closeStage(labelVirhe);
     }
 
     //=========================== omia koodeja ==========================
@@ -48,8 +54,7 @@ public class MuokkausController implements ModalControllerInterface<Paiva>, Init
     
     @Override
     public void handleShown() {
-        // TODO Auto-generated method stub
-        
+        editPvm.requestFocus();
     }
 
     @Override
@@ -59,15 +64,13 @@ public class MuokkausController implements ModalControllerInterface<Paiva>, Init
 
     @Override
     public Paiva getResult() {
-        // TODO Auto-generated method stub
-        return null;
+        return paivaKohdalla;
     }
 
     @Override
     public void setDefault(Paiva oletus) {
         paivaKohdalla = oletus;
         naytaPaiva(paivaKohdalla);
-        
     }
     
     
@@ -76,7 +79,38 @@ public class MuokkausController implements ModalControllerInterface<Paiva>, Init
      */
     private void alusta() {
         edits = new TextField[] {editPvm, editPaikka, editKello, editAlinLampo};
-
+        int i = 0;
+        for (TextField edit : edits) {
+            final int k = ++i;
+            edit.setOnKeyReleased(e -> kasitteleMuutosPaivaan(k,(TextField)(e.getSource())));
+        }
+    }
+    
+    /**
+     * Käsitellään päivään tullut muutos
+     * @param k kentän numero
+     * @param edit muuttunut kenttä
+     */
+    private void kasitteleMuutosPaivaan(int k, TextField edit) {
+        if (paivaKohdalla == null) return;
+        String s = edit.getText();
+        String virhe = null;
+        switch (k) {
+        case 1 : virhe = paivaKohdalla.setPvm(s); break;
+        case 2 : virhe = paivaKohdalla.setPaikka(s); break;
+        case 3 : virhe = paivaKohdalla.setKello(s); break;
+        //case 4 : virhe = paivaKohdalla.setAlinLampo(s); break;
+        default:
+        }
+        if (virhe == null) {
+            Dialogs.setToolTipText(edit, "");
+            edit.getStyleClass().removeAll("virhe");
+            naytaVirhe(virhe);
+        } else {
+            Dialogs.setToolTipText(edit, virhe);
+            edit.getStyleClass().add("virhe");
+            naytaVirhe(virhe);
+        }
     }
     
     
@@ -100,6 +134,16 @@ public class MuokkausController implements ModalControllerInterface<Paiva>, Init
      */
     public void naytaPaiva(Paiva paiva) {
         naytaPaiva(edits, paiva);
+    }
+    
+    private void naytaVirhe(String virhe) {
+        if ( virhe == null || virhe.isEmpty()) {
+            labelVirhe.setText("");
+            labelVirhe.getStyleClass().removeAll("virhe");
+            return;
+        }
+        labelVirhe.setText(virhe);
+        labelVirhe.getStyleClass().add("virhe");
     }
     
     /**

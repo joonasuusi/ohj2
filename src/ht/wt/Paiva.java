@@ -16,7 +16,7 @@ import static kanta.PaivaLuonti.*;
  * @version 27.2.2020
  *
  */
-public class Paiva {
+public class Paiva implements Cloneable {
     
     private int tunnusNro;
     private static int seuraavaNro = 1;
@@ -224,4 +224,40 @@ public class Paiva {
         out.println("Huomiot: " + huomiot);
         out.println("Säätila: " + saatila);
     }
+    
+    /**
+     * kloonataan päivä
+     */
+    @Override
+    public Paiva clone() throws CloneNotSupportedException {
+        Paiva uusi = (Paiva) super.clone();
+        return uusi;
+    }
+
+
+    public String setPvm(String s) {
+        if( !s.matches("[0-9]*\\.[0-9]*\\.[0-9]*")) return "Päivämäärän pitää olla muota pp.kk.vvvv";
+        pvm = s;
+        return null;
+        //TODO: tarkistus
+    }
+
+
+    public String setPaikka(String s) {
+        paikka = s;
+        return null;
+    }
+
+
+    public String setKello(String s) {
+        kello = s;
+        return null;
+    }
+
+
+   // public double setAlinLampo(double d) {
+     //   double k = alinLampo;
+       // String s = String.valueOf(k);
+        //return 0;
+    //}
 }

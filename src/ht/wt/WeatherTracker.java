@@ -139,4 +139,15 @@ public class WeatherTracker {
         paivat.lueTiedostosta();
         //saatilat.lueTiedostosta();    
     }
+    
+    /**
+     * Korvaa päivän tietorakenteessa. Ottaa päivän omistukseensa. 
+     * Etsitään samalla tunnusnumerola oleva päivä jos ei löyvy nii lisätään
+     * uutena päivänä.
+     * @param paiva korvattava tai lisättävän päivä viite
+     * @throws SailoException jos tietorakenne on jo täynnä
+     */
+    public void korvaaTaiLisaa(Paiva paiva) throws SailoException {
+        paivat.korvaaTaiLisaa(paiva);
+    }
 }

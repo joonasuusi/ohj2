@@ -162,4 +162,48 @@ public class Paivat {
             //throw new SailoException("Tiedoston kirjoittamisessa on ongelmia " + e.getMessage());
         //}
     }
+    
+    /**
+     * Korvaa päivän tietorakenteessa. Ottaa päivän omistukseensa. 
+     * Etsitään samalla tunnusnumerola oleva päivä jos ei löyvy nii lisätään
+     * uutena päivänä.
+     * @param paiva korvattava tai lisättävän päivä viite
+     * @throws SailoException jos tietorakenne on jo täynnä
+     * @example
+     * <pre name="test">
+     *  #THROWS SailoException, CloneNotSupportedException
+     *  #PACKAGEIMPORT
+     *  Paivat paivat = new Paivat();
+     *  Paiva pvm1 = new Paiva();
+     *  Paiva pvm2 = new Paiva();
+     *  pvm1.rekisteroi();
+     *  pvm2.rekisteroi();
+     *  paivat.getLkm() === 0;
+     *  paivat.korvaaTaiLisaa(pvm1);
+     *  paivat.getLkm() === 1;
+     *  paivat.korvaaTaiLisaa(pvm2);
+     *  paivat.getLkm() === 2;
+     *  Paiva pvm3 = pvm1.clone();
+     *  pvm3.setPaikka("Rovaniemi");
+     *  Iterator<Paiva> it = paivat.iterator();
+     *  it.next() == pvm1 === true;
+     *  paivat.korvaaTaiLisaa(pvm3);
+     *  paivat.getLkm() === 2;
+     *  it = paivat.iterator();
+     *  Paiva p0 = it.next();
+     *  p0 === pvm3;
+     *  p0 == pvm3 === true;
+     *  p0 == pvm1 === false;
+     * </pre>
+     */
+    public void korvaaTaiLisaa(Paiva paiva) throws SailoException {
+        int id = paiva.getTunnusNro();
+        for (int i = 0; i < lkm; i++) {
+            if (alkiot[i].getTunnusNro() == id) {
+                alkiot[i] = paiva;
+                return;
+            }
+        }
+        lisaa(paiva);
+    }
 }

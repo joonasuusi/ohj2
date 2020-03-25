@@ -142,10 +142,11 @@ public class PaaIkkunaController implements Initializable {
      */
     private void uusiPaiva() {
         Paiva uusi = new Paiva();
-        uusi.taytaPvmTiedoilla(); // TODO: korvaa oikeasti dialogilla(se on jo) handleuudessa
+        uusi = MuokkausController.kysyPaiva(null, uusi);
+        if (uusi == null) return;
+        uusi.rekisteroi();
         weathertracker.lisaa(uusi);
         hae(uusi.getTunnusNro());
-        
     }
     
     /*
@@ -190,8 +191,17 @@ public class PaaIkkunaController implements Initializable {
     
     
     private void muokkaa() {
-        //ModalController.showModal(PaaIkkunaController.class.getResource("muokkausikkuna.fxml"), "Muokkaa", null, "");
-        MuokkausController.kysyPaiva(null, paivaKohdalla);
+        if ( paivaKohdalla == null) return;
+        try {
+            Paiva paiva = MuokkausController.kysyPaiva(null, paivaKohdalla.clone());
+            if ( paiva == null) return;
+            weathertracker.korvaaTaiLisaa(paiva);
+            hae(paiva.getTunnusNro());
+        } catch (CloneNotSupportedException e) {
+            //
+        } catch (SailoException e) {
+            Dialogs.showMessageDialog(e.getMessage());
+        }
     }
     
     
