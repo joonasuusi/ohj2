@@ -36,6 +36,7 @@ public class paivaController implements ModalControllerInterface<Paiva>, Initial
 
     //=========================== omia koodeja ==========================
     private Paiva paivaKohdalla;
+    private TextField[] edits;
     
     @Override
     public void handleShown() {
@@ -45,8 +46,7 @@ public class paivaController implements ModalControllerInterface<Paiva>, Initial
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        // TODO Auto-generated method stub
-        
+        alusta();
     }
 
     @Override
@@ -64,26 +64,45 @@ public class paivaController implements ModalControllerInterface<Paiva>, Initial
     
     
     /**
+     * Tekee tarvittavat muut alustukset
+     */
+    private void alusta() {
+        edits = new TextField[] {editPvm, editPaikka, editKello, editAlinLampo};
+
+    }
+    
+    
+    /**
+     * Näytetään päivän tiedot TextField komponentteihin
+     * @param edits taulukko, jossa tekstikenttiä
+     * @param paiva näytettävä päivä
+     */
+    public static void naytaPaiva(TextField[] edits, Paiva paiva) {
+        if (paiva == null) return;
+        edits[0].setText(paiva.getPvm());
+        edits[1].setText(paiva.getPaikka());
+        edits[2].setText(paiva.getKello());
+        edits[3].setText(String.valueOf(paiva.getAlinLampo()));
+    }
+    
+    
+    /**
      * Näytetään päivän tiedot TextField komponentteihin
      * @param paiva näytettävä päivä
      */
     public void naytaPaiva(Paiva paiva) {
-        if (paiva == null) return;
-        editPvm.setText(paiva.getPvm());
-        editPaikka.setText(paiva.getPaikka());
-        editKello.setText(paiva.getKello());
-        editAlinLampo.setText(String.valueOf(paiva.getAlinLampo()));
+        naytaPaiva(edits, paiva);
     }
     
-/**
- * Luodaan päivän kysymisdialogi ja palautetaan sama tietue muutettuna tai null
- * TODO: korjattava toimimaan
- * @param modalityStage mille ollaan modaalisia, null=sovellukselle
- * @param oletus mitä dataa näytetään oletuksena
- * @return null, jos painetaan Cancel, muuten täytetty tietue
- */
-  public static Paiva kysyPaiva(Stage modalityStage, Paiva oletus) {
-      return ModalController.showModal(PaaIkkunaController.class.getResource("muokkausikkuna.fxml"), "Muokkaa", modalityStage, oletus, null);
-  } //onko PaaIkkunaController vrt vesalla paivaController tässä
-
-}
+    /**
+     * Luodaan päivän kysymisdialogi ja palautetaan sama tietue muutettuna tai null
+     * TODO: korjattava toimimaan
+     * @param modalityStage mille ollaan modaalisia, null=sovellukselle
+     * @param oletus mitä dataa näytetään oletuksena
+     * @return null, jos painetaan Cancel, muuten täytetty tietue
+     */
+      public static Paiva kysyPaiva(Stage modalityStage, Paiva oletus) {
+          return ModalController.showModal(PaaIkkunaController.class.getResource("muokkausikkuna.fxml"), "Muokkaa", modalityStage, oletus, null);
+      } //onko PaaIkkunaController vrt vesalla paivaController tässä
+    
+    }

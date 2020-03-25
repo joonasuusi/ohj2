@@ -2,19 +2,14 @@ package FXht;
 
 import java.awt.Desktop;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ResourceBundle;
-
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ListChooser;
 import fi.jyu.mit.fxgui.ModalController;
-import fi.jyu.mit.fxgui.ModalControllerInterface;
-import fi.jyu.mit.fxgui.TextAreaOutputStream;
 import ht.wt.Paiva;
-import ht.wt.Saatila;
 import ht.wt.SailoException;
 import ht.wt.WeatherTracker;
 import javafx.application.Platform;
@@ -22,10 +17,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.text.Font;
-import javafx.stage.Stage;
 
 /**
  * @author Joonas Uusi-Autti & Sini Lällä
@@ -42,12 +34,6 @@ public class PaaIkkunaController implements Initializable {
     @FXML private TextField editPaikka;
     @FXML private TextField editKello;
     @FXML private TextField editAlinLampo;
-    
-    @Override
-    public void initialize(URL url, ResourceBundle bundle) {
-        alusta();
-    }
-    
     
     @FXML private void handleUusi() {
         // ModalController.showModal(PaaIkkunaController.class.getResource("lisaysikkuna.fxml"),
@@ -112,9 +98,14 @@ public class PaaIkkunaController implements Initializable {
     // =============== omat koodit ===============
     
     WeatherTracker weathertracker;
-    //private TextArea areaPaiva = new TextArea();
     private Paiva paivaKohdalla;
-    private Saatila saa;
+    private TextField[] edits;
+    
+    @Override
+    public void initialize(URL url, ResourceBundle bundle) {
+        alusta();
+    }
+    
     
     /**
      * Aliohjelma joka ohjaa sivustolle jossa käyttöohjeet käyttöliittymälle
@@ -186,12 +177,12 @@ public class PaaIkkunaController implements Initializable {
      * Alustetaan ja luodaan näyttöön uusi päivä
      */
     private void alusta() {
-        //panelPaiva.setContent(areaPaiva);
-        //areaPaiva.setFont(new Font("Courier New", 12));
         panelPaiva.setFitToHeight(true);
         
         chooserPaivat.clear();
         chooserPaivat.addSelectionListener(e -> naytaPaiva());
+        
+        edits = new TextField[] {editPvm, editPaikka, editKello, editAlinLampo};
 
     }
     
@@ -207,10 +198,13 @@ public class PaaIkkunaController implements Initializable {
     private void naytaPaiva() {
         paivaKohdalla = chooserPaivat.getSelectedObject();
         if ( paivaKohdalla == null) return;
-        editPvm.setText(paivaKohdalla.getPvm());
-        editPaikka.setText(paivaKohdalla.getPaikka());
-        editKello.setText(paivaKohdalla.getKello());
-        editAlinLampo.setText(String.valueOf(paivaKohdalla.getAlinLampo()));
+        
+        paivaController.naytaPaiva(edits, paivaKohdalla);
+        
+        //editPvm.setText(paivaKohdalla.getPvm());
+        //editPaikka.setText(paivaKohdalla.getPaikka());
+        //editKello.setText(paivaKohdalla.getKello());
+        //editAlinLampo.setText(String.valueOf(paivaKohdalla.getAlinLampo()));
         
         //areaPaiva.setText("");
         //try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaPaiva)) {
