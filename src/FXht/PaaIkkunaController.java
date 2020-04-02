@@ -5,11 +5,16 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
+
+import fi.jyu.mit.fxgui.Chooser;
+import fi.jyu.mit.fxgui.ComboBoxChooser;
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ListChooser;
 import fi.jyu.mit.fxgui.ModalController;
 import ht.wt.Paiva;
+import ht.wt.Saatila;
 import ht.wt.SailoException;
 import ht.wt.WeatherTracker;
 import javafx.application.Platform;
@@ -18,6 +23,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 
 /**
  * @author Joonas Uusi-Autti & Sini Lällä
@@ -34,21 +40,29 @@ public class PaaIkkunaController implements Initializable {
     @FXML private TextField editPaikka;
     @FXML private TextField editKello;
     @FXML private TextField editAlinLampo;
+    @FXML private TextField editYlinLampo;
+    @FXML private TextField editSademaara;
+    @FXML private TextField editHuomiot;
+    @FXML private TextField editSaatila;
+    
     
     @FXML private void handleUusi() {
-        // ModalController.showModal(PaaIkkunaController.class.getResource("lisaysikkuna.fxml"),
-           //     "Lisää uusi", null, "");
         uusiPaiva();
     } 
     
     @FXML private void handleSaatila() {
-        ModalController.showModal(PaaIkkunaController.class.getResource("lisaaSaatila.fxml"),
-                "Muokkaa säätiloja", null, "");
+        TextInputDialog dialog = new TextInputDialog("");
+        dialog.setHeaderText("Lisätään uusi säätila");
+        dialog.setTitle("Lisää säätila");
+        dialog.setContentText("Lisää uusi säätila:");
+        Optional<String> saa = dialog.showAndWait();
+        String s = saa.get();
+        uusiSaa(s);
     }
     
     @FXML private void handlePoistaSaa() {
-        ModalController.showModal(PaaIkkunaController.class.getResource("poistaSaatila.fxml"),
-                "Säätilan poisto", null, "");
+        ModalController.showModal(SaatilaController.class.getResource("poistaSaatila.fxml"),
+                "Säätilan poisto", null, weathertracker);
     }
     
     @FXML private void handleLopeta() {
@@ -69,7 +83,7 @@ public class PaaIkkunaController implements Initializable {
     }
     
     @FXML private void handleTietoja() {
-        ModalController.showModal(PaaIkkunaController.class.getResource("tietoja.fxml"),
+        ModalController.showModal(TietojaController.class.getResource("tietoja.fxml"),
                 "Tietoja", null, "");
     }
     
@@ -128,7 +142,6 @@ public class PaaIkkunaController implements Initializable {
      * Aliohjelma joka tallentaa syötetyt tiedot
      */
     private void tallenna() {
-        //Dialogs.showMessageDialog("Tallennetetaan! Mutta ei toimi vielä");
         try {
             weathertracker.tallenna();
         } catch (SailoException e) {
@@ -149,14 +162,16 @@ public class PaaIkkunaController implements Initializable {
         hae(uusi.getTunnusNro());
     }
     
-    /*
-    private void uusiSaa() {
-        if ( paivaKohdalla == null ) return;  
-        saa = new Saatila();   
-        saa.paivanSaa();  
+    
+    /**
+     * Lisätään uusi säätila ohjelmalle
+     * @param saatila lisättävä säätila
+     */
+    private void uusiSaa(String saatila) {
+        Saatila saa = new Saatila(saatila);
+        saa.rekisteroi(); 
         weathertracker.lisaa(saa);
     }
-    */
 
     /**
      * Tyhjennetään lista ja haetaan weathertracker luokalta päivämäärä
@@ -185,11 +200,15 @@ public class PaaIkkunaController implements Initializable {
         chooserPaivat.clear();
         chooserPaivat.addSelectionListener(e -> naytaPaiva());
         
-        edits = new TextField[] {editPvm, editPaikka, editKello, editAlinLampo};
+        edits = new TextField[] {editPvm, editPaikka, editKello, editAlinLampo,
+                                editYlinLampo, editSademaara, editHuomiot, editSaatila};
 
     }
     
     
+    /**
+     * Aliohjelma jo olemassa olevan päivän muokkaamiseksi
+     */
     private void muokkaa() {
         if ( paivaKohdalla == null) return;
         try {
@@ -213,16 +232,6 @@ public class PaaIkkunaController implements Initializable {
         if ( paivaKohdalla == null) return;
         
         MuokkausController.naytaPaiva(edits, paivaKohdalla);
-        
-        //editPvm.setText(paivaKohdalla.getPvm());
-        //editPaikka.setText(paivaKohdalla.getPaikka());
-        //editKello.setText(paivaKohdalla.getKello());
-        //editAlinLampo.setText(String.valueOf(paivaKohdalla.getAlinLampo()));
-        
-        //areaPaiva.setText("");
-        //try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaPaiva)) {
-        //    paivaKohdalla.tulosta(os);
-        //}
     }
     
     

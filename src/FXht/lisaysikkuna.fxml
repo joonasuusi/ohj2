@@ -29,7 +29,6 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <Label text="Päivämäärä">
@@ -57,22 +56,17 @@
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
             </Label>
-            <Label text="Säätila" GridPane.rowIndex="5">
+            <Label text="Säätila" GridPane.rowIndex="7">
                <GridPane.margin>
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
             </Label>
-            <Label text="Sademäärä" GridPane.rowIndex="6">
+            <Label text="Sademäärä" GridPane.rowIndex="5">
                <GridPane.margin>
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
             </Label>
-            <Label text="Huomiot" GridPane.rowIndex="7">
-               <GridPane.margin>
-                  <Insets left="10.0" right="10.0" />
-               </GridPane.margin>
-            </Label>
-            <Label prefHeight="17.0" text="Lämpötila keskiarvo" GridPane.rowIndex="8">
+            <Label text="Huomiot" GridPane.rowIndex="6">
                <GridPane.margin>
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
@@ -81,11 +75,8 @@
             <TextField prefWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField prefWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <TextField prefWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <TextField prefWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <TextField prefWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <TextField prefWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <TextField editable="false" prefWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <TextField fx:id="editYlinLampo" prefWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <TextField fx:id="editHuomiot" prefWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <Label text=" °C" GridPane.columnIndex="2" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets left="5.0" />
@@ -96,17 +87,13 @@
                   <Insets left="5.0" />
                </GridPane.margin>
             </Label>
-            <Label text="mm" GridPane.columnIndex="2" GridPane.rowIndex="6">
+            <Label text="mm" GridPane.columnIndex="2" GridPane.rowIndex="5">
                <GridPane.margin>
                   <Insets left="5.0" />
                </GridPane.margin>
             </Label>
-            <Label text=" °C" GridPane.columnIndex="2" GridPane.rowIndex="8">
-               <GridPane.margin>
-                  <Insets left="5.0" />
-               </GridPane.margin>
-            </Label>
-            <ComboBoxChooser prefHeight="25.0" prefWidth="130.0" GridPane.columnIndex="1" GridPane.rowIndex="5" rivit="Aurinkoinen&#10;Pilvinen&#10;Puolipilvinen&#10;Vesisade&#10;Räntäsade&#10;Lumisade"/>
+            <ComboBoxChooser fx:id="saaLista" prefHeight="25.0" prefWidth="130.0" rivit="Aurinkoinen&#10;Pilvinen&#10;Puolipilvinen&#10;Vesisade&#10;Räntäsade&#10;Lumisade" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <TextField fx:id="editSademaara" prefWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
          </children>
       </GridPane>
    </center>
@@ -117,7 +104,7 @@
          <children>
             <ButtonBar layoutX="70.0" layoutY="5.0" prefHeight="40.0" prefWidth="184.0">
                <buttons>
-                  <Button defaultButton="true" minWidth="58.0" mnemonicParsing="false" onAction="#handleOK" prefHeight="25.0" text="Tallenna" />
+                  <Button defaultButton="true" minWidth="58.0" mnemonicParsing="false" onAction="#handleOK" prefHeight="25.0" text="OK" />
                   <Button fx:id="textCancel" cancelButton="true" mnemonicParsing="false" onAction="#handleCancel" text="Takaisin" />
                </buttons>
             </ButtonBar>

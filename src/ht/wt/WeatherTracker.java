@@ -3,7 +3,7 @@
  */
 package ht.wt;
 
- /**                                                
+/**                                                
  * Huolehtii Paivat ja Saatilat luokkien välisestä  
  * yhteistyöstä ja välittää näitä tietoja pyydettäessä                                     
  * Lukee ja kirjoittaa WeatherTracker tiedostoon
@@ -23,7 +23,6 @@ public class WeatherTracker {
     public static void main(String[] args) {
         WeatherTracker weathertracker = new WeatherTracker();
         
-       // try {
         Paiva pvm = new Paiva(), pvm1 = new Paiva();
         pvm.rekisteroi();
         pvm1.rekisteroi();
@@ -39,10 +38,6 @@ public class WeatherTracker {
             System.out.println("Päivämäärä: " + i);
             paiva.tulosta(System.out);
         }
-        
-     //   } catch (SailoException e) {
-       //     System.err.println(e.getMessage());
-        //}
     }
     
     
@@ -88,6 +83,14 @@ public class WeatherTracker {
         return paivat.getLkm();
     }
     
+    /**
+     * Saadaan säätilojen lukumäärä
+     * @return säätilojen lukumäärä
+     */
+    public int getSaatilat() {
+        return saatilat.getLkm();
+    }
+    
     
     /**
      * Palauttaa i:n päivän
@@ -98,18 +101,18 @@ public class WeatherTracker {
     public Paiva annaPaiva(int i) throws IndexOutOfBoundsException {
         return paivat.anna(i);
     }
-
     
+
     /**
-     * Haetaan numeroa vastaava säätilan arvo
-     * @param arpa arvottu numero
-     * @return numeroa vastaava säätila
+     * Palauttaa i:n säätilan
+     * @param i monesko säätila palautetaan
+     * @return viite i:teen söötilaan
      */
-    public static String haeSaatila(int arpa) {
-        return Saatilat.haeSaatila(arpa);
+    public Saatila annaSaa(int i) {
+        return saatilat.anna(i);
     }
 
-
+    
     /**
      * Tallentaa molemmat tiedostot
      * @throws SailoException jos joku menee pieleen
@@ -122,14 +125,14 @@ public class WeatherTracker {
             virhe += e.getMessage();
         }
         try {
-            saatilat.tallenna(); //TODO: muista tehdä
+            saatilat.tallenna();
         } catch (SailoException e) {
-            virhe += e.getMessage();;
+            virhe += e.getMessage();
         }
+
         if (virhe.length() > 0 )
             throw new SailoException(virhe);
     }
-
 
     /**
      * Luetaan tiedosto
@@ -137,8 +140,9 @@ public class WeatherTracker {
      */
     public void lueTiedostosta() throws SailoException {
         paivat.lueTiedostosta();
-        //saatilat.lueTiedostosta();    
+        saatilat.lueTiedostosta();    
     }
+    
     
     /**
      * Korvaa päivän tietorakenteessa. Ottaa päivän omistukseensa. 

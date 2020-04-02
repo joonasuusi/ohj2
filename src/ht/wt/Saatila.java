@@ -5,6 +5,8 @@ package ht.wt;
 
 import java.io.PrintStream;
 
+import fi.jyu.mit.ohj2.Mjonot;
+
  /**
  * Tietää säätilojen kentät.                   
  * Osaa tarkistaa tietyn kentän oikeellisuuden (syntaksin)                                 
@@ -16,35 +18,67 @@ import java.io.PrintStream;
  *
  */
 public class Saatila {
-   
-    private static Saatila[] saa =  {
-            new Saatila (1, "aurinkoinen"), 
-            new Saatila (2, "pilvinen"), 
-            new Saatila (3, "puolipilvinen"),
-            new Saatila (4, "vesisade"), 
-            new Saatila (5, "räntäsade"), 
-            new Saatila (6, "lumisade")
-    };
-    
-    private String saatila = "";
-    private int id = 0;
+    private String saatila;
+    private int id;
+    private static int seuraavaId = 1;
     
     /**
      * Alustetaan sää
-     * @param id säätilan id
      * @param saa säätila
      */
-    public Saatila(int id, String saa) {
-        this.id = id;
+    public Saatila(String saa) {
         this.saatila = saa;
+        
+    }
+    
+    /**
+     * Antaa säätilalle seuraaavan id-numeron
+     * @return säätilan uusi id-numeron
+     * @example
+     * <pre name="test">
+     * Paiva paiva1 = new Paiva();
+     * paiva1.getTunnusNro() === 0;
+     * paiva1.rekisteroi();
+     * Paiva paiva2 = new Paiva();
+     * paiva2.rekisteroi();
+     * int n1 = paiva1.getTunnusNro();
+     * int n2 = paiva2.getTunnusNro();
+     * n1 === n2-1;
+     * </pre>
+     */
+    public int rekisteroi() {
+        id = seuraavaId;
+        seuraavaId++;
+        return id;
     }
     
     
+    /**
+     * Palauttaa säätilan tiedot merkkijonona, jonka voi tallentaa tiedostoon.
+     * @return säätila tolppaeroteltuna merkkijonona
+     * @example
+     * <pre name="test">
+     * Saatila saa = new Saatila();
+     * saa.parse("3  |    aurinkoinen");
+     * saa.toString().startsWith("3|aurinkoinen|") === true;
+     * </pre>
+     */
     @Override
     public String toString() {
         return "" + 
                 getId() + "|" +
                 saatila + "|";
+    }
+    
+    
+    /**
+     * @param rivi jota luetaan
+     */
+    public void parse(String rivi) {
+        StringBuilder sb = new StringBuilder(rivi);
+        setTunnusId(Mjonot.erota(sb, '|', getId()));
+        saatila = Mjonot.erota(sb, '|', saatila);
+        
     }
 
 
@@ -72,8 +106,18 @@ public class Saatila {
      * @return palauttaa säätilan id:n
      */
     public int getId() {
-        id++;
         return id;
+    }
+    
+    /**
+     * asettaa tunnusnron ja samalla varmistaa että
+     * seuraava on numero on aina suurempi kuin tähän mennessä suurin
+     * @param nro asetettava tunnusnrro
+     */
+    public void setTunnusId(int nro) {
+        id = nro;
+        if (id >= seuraavaId)
+            seuraavaId = id+1;
     }
     
     
@@ -82,7 +126,7 @@ public class Saatila {
      * @param out mihin virtaa tulostetaan
      */
     public void tulosta(PrintStream out) {
-        out.println("Säätila: " + saatila);    
+        out.println(getId() + " Säätila: " + saatila);    
     } 
 
     
@@ -91,19 +135,5 @@ public class Saatila {
      */
     public static void main(String[] args) {
         //
-    }
-
-    
-    /**
-     * Haetaan numeroa vastaava säätilan arvo
-     * @param arpa arvottu numero
-     * @return numeroa vastaava säätila
-     */
-    public static String haeSaatila(int arpa) {
-        for (int i = 0; i < saa.length; i++) {
-            if (saa[i].getId() == arpa) 
-                return saa[i].getSaatila();
-        }
-        return "";
-    }
+    }    
 }

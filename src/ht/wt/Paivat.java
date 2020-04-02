@@ -20,10 +20,8 @@ import java.util.Scanner;
  *
  */
 public class Paivat {
-    
     private static final int MAX_PAIVIA = 5;
     private int lkm = 0;
-    private String tiedostonNimi = "";
     private Paiva alkiot[] = new Paiva[MAX_PAIVIA];
 
     /**
@@ -90,7 +88,7 @@ public class Paivat {
      */
     public void lisaa(Paiva pvm) {
         if (lkm >= alkiot.length) {
-            Paiva uusi[] = new Paiva[alkiot.length*2];
+            Paiva uusi[] = new Paiva[alkiot.length+10];
             for (int i = 0; i < alkiot.length; i++) {
                 uusi[i] = alkiot[i];
             }
@@ -114,16 +112,6 @@ public class Paivat {
 
     
     /**
-     * Haetaan numeroa vastaava säätilan arvo
-     * @param arpa arvottu numero
-     * @return numeroa vastaava säätila
-     */
-    public static String haeSaatila(int arpa) {
-        return WeatherTracker.haeSaatila(arpa);
-    }
-
-    
-    /**
      * Tallennetaan paivatiedosto
      * @throws SailoException jos tiedosto ei aukea
      */
@@ -136,9 +124,7 @@ public class Paivat {
             }
         } catch (FileNotFoundException e) {
             throw new SailoException("Tiedosto ei aukea " + e.getMessage());
-        } //catch (IOException e ) {
-            //throw new SailoException("Tiedoston kirjoittamisessa on ongelmia " + e.getMessage());
-        //}  //TODO: mikä vika tässä?           
+        }         
     }
 
     
@@ -158,12 +144,12 @@ public class Paivat {
           }
         } catch (FileNotFoundException e) {
             throw new SailoException("Tiedosto ei aukea " + e.getMessage());
-        } //catch (IOException e ) {
-            //throw new SailoException("Tiedoston kirjoittamisessa on ongelmia " + e.getMessage());
-        //}
+        } 
     }
     
+    
     /**
+     * TODO: korjaa testi
      * Korvaa päivän tietorakenteessa. Ottaa päivän omistukseensa. 
      * Etsitään samalla tunnusnumerola oleva päivä jos ei löyvy nii lisätään
      * uutena päivänä.

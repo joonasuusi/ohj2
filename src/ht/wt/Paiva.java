@@ -25,9 +25,9 @@ public class Paiva implements Cloneable {
     private String kello = "";
     private double alinLampo = 0.0;
     private double ylinLampo = 0.0;
-    private String saatila;
     private double sademaara = 0.0; 
     private String huomiot = "";
+    private String saatila;
     
 
     /**
@@ -65,6 +65,30 @@ public class Paiva implements Cloneable {
         return alinLampo;
     }
     
+    /**
+     * Hakee ylimmän lämpötilan
+     * @return palauttaa ylimmän lämpötilan
+     */
+    public double getYlinLampo() {
+        return ylinLampo;
+    }
+    
+    /**
+     * Hakee sademäärän
+     * @return palauttaa sademäärän
+     */
+    public double getSademaara() {
+        return sademaara;
+    }
+    
+    /**
+     * Hakee päivän huomiot
+     * @return palauttaa päivän huomiot
+     */
+    public String getHuomiot() {
+        return huomiot;
+    }
+    
     
     /**
      * Palauttaa päivän tiedot merkkijonona, jonka voi tallentaa tiedostoon.
@@ -85,9 +109,9 @@ public class Paiva implements Cloneable {
                 kello + "|" +
                 alinLampo + "|" +
                 ylinLampo + "|" +
-                saatila + "|" +
                 sademaara + "|" +
-                huomiot + "|";
+                huomiot + "|" +
+                saatila + "|";
     }
     
     
@@ -102,9 +126,9 @@ public class Paiva implements Cloneable {
         kello = Mjonot.erota(sb, '|', kello);
         alinLampo = Mjonot.erota(sb, '|', alinLampo);
         ylinLampo = Mjonot.erota(sb, '|', ylinLampo);
-        saatila = Mjonot.erota(sb, '|', saatila);
         sademaara = Mjonot.erota(sb, '|', sademaara);
-        huomiot = Mjonot.erota(sb, '|', huomiot); 
+        huomiot = Mjonot.erota(sb, '|', huomiot);
+        saatila = Mjonot.erota(sb, '|', saatila);
     }
     
     
@@ -152,7 +176,7 @@ public class Paiva implements Cloneable {
         kello = "10:29";
         alinLampo = -2.2;
         ylinLampo = 3.3;
-        saatila = haeSaatila(rand(0,6));
+       // saatila = haeSaatila(rand(0,6));
         sademaara = 0.2;
         huomiot = "";
     }
@@ -202,16 +226,6 @@ public class Paiva implements Cloneable {
 
     
     /**
-     * Haetaan numeroa vastaava säätilan arvo
-     * @param arpa arvottu numero
-     * @return numeroa vastaava säätila
-     */
-    private String haeSaatila(int arpa) {
-        return Paivat.haeSaatila(arpa);
-    }
-
-    
-    /**
      * Tulostetaan päivän tiedot
      * @param out mihin virtaa tulostetaan
      */
@@ -235,29 +249,82 @@ public class Paiva implements Cloneable {
     }
 
 
+    /**
+     * Asetetetaan päivämäärä ja tarkistetaan se
+     * @param s asetettava päivämäärä
+     * @return null, jos onnistui
+     */
     public String setPvm(String s) {
         if( !s.matches("[0-9]*\\.[0-9]*\\.[0-9]*")) return "Päivämäärän pitää olla muota pp.kk.vvvv";
         pvm = s;
         return null;
-        //TODO: tarkistus
     }
 
 
+    /**
+     * Asetetaan paikka
+     * @param s asetettava paikka
+     * @return null, jos onnistui
+     */
     public String setPaikka(String s) {
         paikka = s;
         return null;
     }
 
 
+    /**
+     * Asetetaan kellonaika
+     * @param s asetettava kellonaika
+     * @return nuul, jos onnistui
+     */
     public String setKello(String s) {
         kello = s;
         return null;
     }
 
 
-   // public double setAlinLampo(double d) {
-     //   double k = alinLampo;
-       // String s = String.valueOf(k);
-        //return 0;
-    //}
+   /**
+    * Asetetaan alinlämpö
+    * @param s asetettava alinlämpö
+    * @return null, jos onnistui
+    */
+   public String setAlinLampo(String s) {
+       StringBuilder sb = new StringBuilder(s);
+       alinLampo = Mjonot.erota(sb, '§', alinLampo);
+       return null;
+    }
+   
+   
+   /**
+    * Asetetaan ylinlämpö
+    * @param s asetettavayalinlämpö
+    * @return null, jos onnistui
+    */
+   public String setYlinLampo(String s) {
+       StringBuilder sb = new StringBuilder(s);
+        ylinLampo = Mjonot.erota(sb, '§', ylinLampo);
+        return null;
+    }
+   
+   
+   /**
+    * Asetetaan sademäärä
+    * @param s asetettava sademäärä
+    * @return null, jos onnistui
+    */
+   public String setSademaara(String s) {
+       StringBuilder sb = new StringBuilder(s);
+        sademaara = Mjonot.erota(sb, '§', sademaara);
+        return null;
+    }
+   
+   /**
+    * Asetetaan huomio
+    * @param s asetettavat huomiot
+    * @return null, jos onnistui
+    */
+   public String setHuomiot(String s) {
+       huomiot = s;
+       return null;
+    }
 }

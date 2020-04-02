@@ -39,19 +39,8 @@ public class AloitusIkkunaController implements ModalControllerInterface<String>
         apua();
     }
     
-    private void apua() {
-        Desktop desktop = Desktop.getDesktop();
-        try {
-            URI uri = new URI("https://tim.jyu.fi/view/kurssit/tie/ohj2/2020k/ht/jopeuusi");
-            desktop.browse(uri);
-        } catch (URISyntaxException e) {
-            return;
-        } catch (IOException e) {
-            return;
-        }
-
-    }
-
+    
+   
     @Override
     public String getResult() {
         // TODO Auto-generated method stub
@@ -69,5 +58,23 @@ public class AloitusIkkunaController implements ModalControllerInterface<String>
         // TODO Auto-generated method stub
         
     }
+    
+    
+    /**
+     * Avaa selaimeen ohjelman avustuksen
+     */
+    private void apua() {
+        Desktop desktop = Desktop.getDesktop();
+        try {
+            URI uri = new URI("https://tim.jyu.fi/view/kurssit/tie/ohj2/2020k/ht/jopeuusi");
+            desktop.browse(uri);
+        } catch (URISyntaxException e) {
+            return;
+        } catch (IOException e) {
+            return;
+        }
+
+    }
+
     
 }

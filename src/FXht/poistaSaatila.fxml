@@ -23,7 +23,7 @@
         </rowConstraints>
          <children>
             <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="192.0" text="Poista säätila" GridPane.rowIndex="1" />
-            <ComboBoxChooser prefHeight="25.0" prefWidth="130.0" rivit="Aurinkoinen&#10;Pilvinen&#10;Puolipilvinen&#10;Vesisade&#10;Räntäsade&#10;Lumisade" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <ComboBoxChooser fx:id="saaLista" prefHeight="25.0" prefWidth="130.0" rivit="Aurinkoinen&#10;Pilvinen&#10;Puolipilvinen&#10;Vesisade&#10;Räntäsade&#10;Lumisade" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleTallenna" text="Tallenna" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets left="80.0" />
@@ -34,6 +34,7 @@
                   <Insets left="50.0" />
                </GridPane.margin>
             </Button>
+            <Label fx:id="labelVirhe" prefHeight="17.0" prefWidth="118.0" />
          </children>
       </GridPane>
    </center>

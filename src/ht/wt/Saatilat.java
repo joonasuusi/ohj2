@@ -3,11 +3,14 @@
  */
 package ht.wt;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Scanner;
 
  /**
  * Pitää yllä varsinaista saatilarekisteria eli osaa lisätä ja poistaa säätilan               
@@ -20,7 +23,6 @@ import java.util.Iterator;
  */
 public class Saatilat implements Iterable<Saatila> {
     private int lkm = 0;
-    private String tiedostonNimi = "";
     
     /**
      * Taulukko säätiloista
@@ -35,7 +37,7 @@ public class Saatilat implements Iterable<Saatila> {
         // toistaiseksi ei tartte tehä mitää
     }
     
-    
+   
     /**
      * Lisää uuden säätilan tietorakenteeseen
      * @param saa lisättävä säätila
@@ -51,8 +53,9 @@ public class Saatilat implements Iterable<Saatila> {
      * @return säätilojen lukumäärä
      */
     public int getLkm() {
-        return alkiot.size();
+        return lkm;
     }
+    
     
     
     @Override
@@ -65,33 +68,73 @@ public class Saatilat implements Iterable<Saatila> {
      * @param args ei käytössä
      */
     public static void main(String[] args) {;
-        //
+        /*
+        Saatila saa = new Saatila();
+        Saatila saa1 = new Saatila();
+        Saatila saa2 = new Saatila();
+        Saatilat aur = new Saatilat();
+        
+        saa.rekisteroi();
+        saa1.rekisteroi();
+        saa2.rekisteroi();
+        saa.taytaTiedoilla();
+        saa1.taytaTiedoilla();
+        saa2.taytaTiedoilla();
+        
+        aur.lisaa(saa);
+        aur.lisaa(saa1);
+        aur.lisaa(saa2);
+        saa.tulosta(System.out);
+        saa1.tulosta(System.out);
+        saa2.tulosta(System.out);
+        */
     }
 
     
     /**
-     * Haetaan numeroa vastaava säätilan arvo
-     * @param arpa arvottu numero
-     * @return numeroa vastaava säätila
-     */
-    public static String haeSaatila(int arpa) {
-        return Saatila.haeSaatila(arpa);
-    }
-
-    
-    /**
-     *  Tallennetaan säätilat tiedostoon
+     * Tallennetaan säätilat tiedostoon
      * @throws SailoException jos tiedosto ei aukea
      */
     public void tallenna() throws SailoException {
-        try (PrintStream fo = new PrintStream(new FileOutputStream("saatilat.dat", true))) {
+        try (PrintStream fo = new PrintStream(new FileOutputStream("saatilat.dat", false))) {
             //fo.println("WeatherTracker"); ei välttämättä tarvitse tai tulostuu joka kerta kun tallennetaan
-            //for (int i = 0; i < getLkm(); i++) {
-                Saatila saa = new Saatila(1, "tuulinen");
+            for (int i = 0; i < alkiot.size(); i++) {
+                Saatila saa = anna(i);
                 fo.println(saa.toString());
-           // }
+            }
         } catch (FileNotFoundException e) {
             throw new SailoException("Tiedosto ei aukea " + e.getMessage());
         } 
+    }
+    
+    
+    /**
+     * Luetaan saatilatiedosto
+     * @throws SailoException jos tiedosto ei auke
+     */
+    public void lueTiedostosta() throws SailoException {
+        try (Scanner fi = new Scanner(new FileInputStream(new File("saatilat.dat")))) {
+          while ( fi.hasNext()) {
+              String rivi = fi.nextLine();
+              rivi = rivi.trim();
+              if ("".equals(rivi) || rivi.charAt(0) == ';') continue; //tarvitaanko?
+              Saatila saa = new Saatila("");
+              System.out.println(rivi);
+              saa.parse(rivi);
+              lisaa(saa);
+          }
+        } catch (FileNotFoundException e) {
+            throw new SailoException("Tiedosto ei aukea " + e.getMessage());
+        } 
+    }
+
+
+    /**
+     * Palauttaa viitteen i:teen säätilaan
+     * @param i monennenko säätilan viite halutaan
+     * @return viite säätilaan jonka indeksi on i
+     */
+    public Saatila anna(int i) {
+        return alkiot.get(i);
     }
 }

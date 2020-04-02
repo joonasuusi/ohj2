@@ -1,57 +1,59 @@
 package FXht;
 
+import fi.jyu.mit.fxgui.ComboBoxChooser;
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.ModalControllerInterface;
+import ht.wt.Saatila;
 import ht.wt.SailoException;
 import ht.wt.WeatherTracker;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 /**
- * @author Joonas Uusi-Autti
+ * @author Joonas Uusi-Autti & Sini Lällä
  * @version 24.2.2020
  *  Keksitään parempi nimi
  */
-public class SaatilaController implements ModalControllerInterface<String> {
+public class SaatilaController implements ModalControllerInterface<WeatherTracker> {
     
-    @FXML private Button textCancel;
-    
+    @FXML private Label labelVirhe;
     @FXML private TextField saaLisays;
+    @FXML public ComboBoxChooser<Saatila> saaLista;
     
     @FXML private void handleTallenna() {
         tallenna();
+        ModalController.closeStage(labelVirhe);
     }
     
     @FXML private void handleCancel() {
-        ModalController.closeStage(textCancel);
+        ModalController.closeStage(labelVirhe);
     }
 
     @Override
-    public String getResult() {
-        // TODO Auto-generated method stub
-        return null;
+    public WeatherTracker getResult() {
+        return weathertracker;
     }
 
     @Override
     public void handleShown() {
-        // TODO Auto-generated method stub
-        
+        asetaChooser();
     }
 
     @Override
-    public void setDefault(String arg0) {
-        // TODO Auto-generated method stub
+    public void setDefault(WeatherTracker oletus) {
+        weathertracker = oletus;
         
     }
     
     // ================= omat koodit ===============
-    WeatherTracker weathertracker;
+    private static WeatherTracker weathertracker;
 
-    
+    /**
+     * TODO: Lisää kommentit
+     */
     private void tallenna() {
-        //Dialogs.showMessageDialog("Tallennetetaan! Mutta ei toimi vielä");
         try {
             weathertracker.tallenna();
         } catch (SailoException e) {
@@ -59,12 +61,14 @@ public class SaatilaController implements ModalControllerInterface<String> {
         } 
     }
     
-    /**
-     * Asetetaan controllerin weathertracker viite
-     * @param weathertracker mihin viitataan
-     */
-    public void setWeatherTracker(WeatherTracker weathertracker) {
-        this.weathertracker = weathertracker;
+    public void asetaChooser() {
+        saaLista.clear();
+        String[] rivit = new String[weathertracker.getSaatilat()];
+        for (int i = 0; i < weathertracker.getSaatilat(); i++) {
+            Saatila saa = weathertracker.annaSaa(i);
+            rivit[i] = saa.getSaatila();
+        }
+        saaLista.setRivit(rivit);
     }
-
+   
 }

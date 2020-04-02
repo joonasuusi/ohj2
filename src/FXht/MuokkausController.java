@@ -8,11 +8,10 @@ import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.ModalControllerInterface;
 import ht.wt.Paiva;
-import ht.wt.SailoException;
+import ht.wt.Saatila;
 import ht.wt.WeatherTracker;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -29,9 +28,12 @@ public class MuokkausController implements ModalControllerInterface<Paiva>, Init
     @FXML private TextField editPaikka;
     @FXML private TextField editKello;
     @FXML private TextField editAlinLampo;
-    @FXML private Button textCancel;
+    @FXML private TextField editYlinLampo;
+    @FXML private TextField editSademaara;
+    @FXML private TextField editHuomiot;
+    @FXML private TextField editSaatila;
     @FXML private Label labelVirhe;
-    @FXML private ComboBoxChooser<String> saatilaValikko;
+    @FXML private ComboBoxChooser<Saatila> saaLista;
     
     @FXML private void handleTallenna() {
         if (paivaKohdalla != null && paivaKohdalla.getPvm().trim().equals("")) {
@@ -49,6 +51,7 @@ public class MuokkausController implements ModalControllerInterface<Paiva>, Init
 
     //=========================== omia koodeja ==========================
     private Paiva paivaKohdalla;
+    private Saatila saa;
     private TextField[] edits;
     WeatherTracker weathertracker;
     
@@ -78,12 +81,14 @@ public class MuokkausController implements ModalControllerInterface<Paiva>, Init
      * Tekee tarvittavat muut alustukset
      */
     private void alusta() {
-        edits = new TextField[] {editPvm, editPaikka, editKello, editAlinLampo};
+        edits = new TextField[] {editPvm, editPaikka, editKello, editAlinLampo
+                                ,editYlinLampo, editSademaara, editHuomiot, editSaatila};
         int i = 0;
         for (TextField edit : edits) {
             final int k = ++i;
             edit.setOnKeyReleased(e -> kasitteleMuutosPaivaan(k,(TextField)(e.getSource())));
         }
+        saaLista.add("kissa", saa);
     }
     
     /**
@@ -99,7 +104,10 @@ public class MuokkausController implements ModalControllerInterface<Paiva>, Init
         case 1 : virhe = paivaKohdalla.setPvm(s); break;
         case 2 : virhe = paivaKohdalla.setPaikka(s); break;
         case 3 : virhe = paivaKohdalla.setKello(s); break;
-        //case 4 : virhe = paivaKohdalla.setAlinLampo(s); break;
+        case 4 : virhe = paivaKohdalla.setAlinLampo(s); break;
+        case 5 : virhe = paivaKohdalla.setYlinLampo(s); break;
+        case 6 : virhe = paivaKohdalla.setSademaara(s); break;
+        case 7 : virhe = paivaKohdalla.setHuomiot(s); break;
         default:
         }
         if (virhe == null) {
@@ -125,6 +133,9 @@ public class MuokkausController implements ModalControllerInterface<Paiva>, Init
         edits[1].setText(paiva.getPaikka());
         edits[2].setText(paiva.getKello());
         edits[3].setText(String.valueOf(paiva.getAlinLampo()));
+        edits[4].setText(String.valueOf(paiva.getYlinLampo()));
+        edits[5].setText(String.valueOf(paiva.getSademaara()));
+        edits[6].setText(paiva.getHuomiot());
     }
     
     
@@ -136,6 +147,10 @@ public class MuokkausController implements ModalControllerInterface<Paiva>, Init
         naytaPaiva(edits, paiva);
     }
     
+    /**
+     * Näytetään virheilmoitus käyttäjälle
+     * @param virhe syntynyt virhe
+     */
     private void naytaVirhe(String virhe) {
         if ( virhe == null || virhe.isEmpty()) {
             labelVirhe.setText("");
@@ -146,9 +161,9 @@ public class MuokkausController implements ModalControllerInterface<Paiva>, Init
         labelVirhe.getStyleClass().add("virhe");
     }
     
+    
     /**
      * Luodaan päivän kysymisdialogi ja palautetaan sama tietue muutettuna tai null
-     * TODO: korjattava toimimaan
      * @param modalityStage mille ollaan modaalisia, null=sovellukselle
      * @param oletus mitä dataa näytetään oletuksena
      * @return null, jos painetaan Cancel, muuten täytetty tietue
@@ -156,6 +171,5 @@ public class MuokkausController implements ModalControllerInterface<Paiva>, Init
       public static Paiva kysyPaiva(Stage modalityStage, Paiva oletus) {
           return ModalController.showModal(MuokkausController.class.getResource("muokkausikkuna.fxml"), 
                   "Muokkaa", modalityStage, oletus, null);
-      } 
-    
-    }
+      }    
+}
