@@ -5,14 +5,13 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-
-import fi.jyu.mit.fxgui.Chooser;
-import fi.jyu.mit.fxgui.ComboBoxChooser;
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ListChooser;
 import fi.jyu.mit.fxgui.ModalController;
+import fi.jyu.mit.ohj2.Mjonot;
 import ht.wt.Paiva;
 import ht.wt.Saatila;
 import ht.wt.SailoException;
@@ -56,8 +55,10 @@ public class PaaIkkunaController implements Initializable {
         dialog.setTitle("Lisää säätila");
         dialog.setContentText("Lisää uusi säätila:");
         Optional<String> saa = dialog.showAndWait();
-        String s = saa.get();
-        uusiSaa(s);
+        if (saa.isPresent()) { 
+            String s = saa.get();
+            uusiSaa(s);
+        }
     }
     
     @FXML private void handlePoistaSaa() {
@@ -173,6 +174,7 @@ public class PaaIkkunaController implements Initializable {
         weathertracker.lisaa(saa);
     }
 
+
     /**
      * Tyhjennetään lista ja haetaan weathertracker luokalta päivämäärä
      * ja lisätään se seuraavaan indeksiin
@@ -232,6 +234,22 @@ public class PaaIkkunaController implements Initializable {
         if ( paivaKohdalla == null) return;
         
         MuokkausController.naytaPaiva(edits, paivaKohdalla);
+        
+        naytaSaa(editSaatila, paivaKohdalla);
+    }
+    
+    /**
+     * @param text tekstikenttä
+     * @param paiva päivä
+     */
+    private void naytaSaa(TextField text, Paiva paiva) {
+        if (paiva == null) return;
+        int numero = paiva.getSaatila();
+        Saatila s = weathertracker.annaSaa(numero-1);
+        StringBuilder sb = new StringBuilder(s.toString());
+        String jono = Mjonot.erota(sb, '|');
+        jono = Mjonot.erota(sb, '|');
+        text.setText(jono);
     }
     
     

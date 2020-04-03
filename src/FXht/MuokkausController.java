@@ -51,13 +51,13 @@ public class MuokkausController implements ModalControllerInterface<Paiva>, Init
 
     //=========================== omia koodeja ==========================
     private Paiva paivaKohdalla;
-    private Saatila saa;
     private TextField[] edits;
-    WeatherTracker weathertracker;
+    private static WeatherTracker weathertracker;
     
     @Override
     public void handleShown() {
         editPvm.requestFocus();
+        
     }
 
     @Override
@@ -81,14 +81,14 @@ public class MuokkausController implements ModalControllerInterface<Paiva>, Init
      * Tekee tarvittavat muut alustukset
      */
     private void alusta() {
+        //asetaChooser();
         edits = new TextField[] {editPvm, editPaikka, editKello, editAlinLampo
-                                ,editYlinLampo, editSademaara, editHuomiot, editSaatila};
+                                ,editYlinLampo, editSademaara, editHuomiot};
         int i = 0;
         for (TextField edit : edits) {
             final int k = ++i;
             edit.setOnKeyReleased(e -> kasitteleMuutosPaivaan(k,(TextField)(e.getSource())));
         }
-        saaLista.add("kissa", saa);
     }
     
     /**
@@ -170,6 +170,19 @@ public class MuokkausController implements ModalControllerInterface<Paiva>, Init
      */
       public static Paiva kysyPaiva(Stage modalityStage, Paiva oletus) {
           return ModalController.showModal(MuokkausController.class.getResource("muokkausikkuna.fxml"), 
-                  "Muokkaa", modalityStage, oletus, null);
-      }    
+                  "Muokkaa", modalityStage, oletus);
+      }  
+      
+      /**
+     * 
+     */
+    public void asetaChooser() {
+          saaLista.clear();
+          String[] rivit = new String[weathertracker.getSaatilat()];
+          for (int i = 0; i < weathertracker.getSaatilat(); i++) {
+              Saatila saa = weathertracker.annaSaa(i);
+              rivit[i] = saa.getSaatila();
+          }
+          saaLista.setRivit(rivit);
+      }
 }

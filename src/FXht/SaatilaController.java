@@ -20,7 +20,7 @@ public class SaatilaController implements ModalControllerInterface<WeatherTracke
     
     @FXML private Label labelVirhe;
     @FXML private TextField saaLisays;
-    @FXML public ComboBoxChooser<Saatila> saaLista;
+    @FXML private ComboBoxChooser<Saatila> saaLista;
     
     @FXML private void handleTallenna() {
         tallenna();

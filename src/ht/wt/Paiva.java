@@ -27,7 +27,7 @@ public class Paiva implements Cloneable {
     private double ylinLampo = 0.0;
     private double sademaara = 0.0; 
     private String huomiot = "";
-    private String saatila;
+    private int saatila;
     
 
     /**
@@ -89,6 +89,9 @@ public class Paiva implements Cloneable {
         return huomiot;
     }
     
+    public int getSaatila() {
+        return saatila;
+    }
     
     /**
      * Palauttaa päivän tiedot merkkijonona, jonka voi tallentaa tiedostoon.
@@ -325,6 +328,12 @@ public class Paiva implements Cloneable {
     */
    public String setHuomiot(String s) {
        huomiot = s;
+       return null;
+    }
+   
+   public String setSaatila(String s) {
+       StringBuilder sb = new StringBuilder(s);
+       saatila = Mjonot.erota(sb, '§', saatila);
        return null;
     }
 }
