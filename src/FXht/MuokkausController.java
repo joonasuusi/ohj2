@@ -52,7 +52,7 @@ public class MuokkausController implements ModalControllerInterface<Paiva>, Init
     //=========================== omia koodeja ==========================
     private Paiva paivaKohdalla;
     private TextField[] edits;
-    private static WeatherTracker weathertracker;
+    private WeatherTracker weathertracker;
     
     @Override
     public void handleShown() {
@@ -83,7 +83,7 @@ public class MuokkausController implements ModalControllerInterface<Paiva>, Init
     private void alusta() {
         //asetaChooser();
         edits = new TextField[] {editPvm, editPaikka, editKello, editAlinLampo
-                                ,editYlinLampo, editSademaara, editHuomiot};
+                                ,editYlinLampo, editSademaara, editHuomiot, editSaatila};
         int i = 0;
         for (TextField edit : edits) {
             final int k = ++i;
@@ -108,6 +108,7 @@ public class MuokkausController implements ModalControllerInterface<Paiva>, Init
         case 5 : virhe = paivaKohdalla.setYlinLampo(s); break;
         case 6 : virhe = paivaKohdalla.setSademaara(s); break;
         case 7 : virhe = paivaKohdalla.setHuomiot(s); break;
+        case 8 : virhe = paivaKohdalla.setSaatila(s); break;
         default:
         }
         if (virhe == null) {
@@ -136,6 +137,7 @@ public class MuokkausController implements ModalControllerInterface<Paiva>, Init
         edits[4].setText(String.valueOf(paiva.getYlinLampo()));
         edits[5].setText(String.valueOf(paiva.getSademaara()));
         edits[6].setText(paiva.getHuomiot());
+        edits[7].setText(String.valueOf(paiva.getSaatila()));
     }
     
     
@@ -174,7 +176,7 @@ public class MuokkausController implements ModalControllerInterface<Paiva>, Init
       }  
       
       /**
-     * 
+     * Tyhjentää säätilojen valintalistan ja hakee tiedostosta säätilat listaan
      */
     public void asetaChooser() {
           saaLista.clear();
@@ -185,4 +187,5 @@ public class MuokkausController implements ModalControllerInterface<Paiva>, Init
           }
           saaLista.setRivit(rivit);
       }
+    
 }

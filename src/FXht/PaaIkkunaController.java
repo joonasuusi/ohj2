@@ -239,7 +239,8 @@ public class PaaIkkunaController implements Initializable {
     }
     
     /**
-     * @param text tekstikenttä
+     * Näytetään pääikkunassa säätila tekstinä
+     * @param text säätilan tekstikenttä
      * @param paiva päivä
      */
     private void naytaSaa(TextField text, Paiva paiva) {

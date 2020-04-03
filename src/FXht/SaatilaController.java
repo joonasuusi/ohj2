@@ -48,7 +48,7 @@ public class SaatilaController implements ModalControllerInterface<WeatherTracke
     }
     
     // ================= omat koodit ===============
-    private static WeatherTracker weathertracker;
+    private WeatherTracker weathertracker;
 
     /**
      * TODO: Lisää kommentit
@@ -61,6 +61,9 @@ public class SaatilaController implements ModalControllerInterface<WeatherTracke
         } 
     }
     
+    /**
+     * Hakee säiden valintalistan
+     */
     public void asetaChooser() {
         saaLista.clear();
         String[] rivit = new String[weathertracker.getSaatilat()];
