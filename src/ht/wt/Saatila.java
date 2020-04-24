@@ -58,7 +58,7 @@ public class Saatila {
      * @return säätila tolppaeroteltuna merkkijonona
      * @example
      * <pre name="test">
-     * Saatila saa = new Saatila();
+     * Saatila saa = new Saatila("");
      * saa.parse("3  |    aurinkoinen");
      * saa.toString().startsWith("3|aurinkoinen|") === true;
      * </pre>
@@ -126,7 +126,7 @@ public class Saatila {
      * @param out mihin virtaa tulostetaan
      */
     public void tulosta(PrintStream out) {
-        out.println(getId() + " Säätila: " + saatila);    
+        out.println("Säätila:           " + saatila);
     } 
 
     

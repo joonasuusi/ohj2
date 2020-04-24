@@ -43,7 +43,6 @@ public class AloitusIkkunaController implements ModalControllerInterface<String>
    
     @Override
     public String getResult() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -55,7 +54,7 @@ public class AloitusIkkunaController implements ModalControllerInterface<String>
 
     @Override
     public void setDefault(String oletus) {
-        // TODO Auto-generated method stub
+        // 
         
     }
     
@@ -73,8 +72,5 @@ public class AloitusIkkunaController implements ModalControllerInterface<String>
         } catch (IOException e) {
             return;
         }
-
     }
-
-    
 }

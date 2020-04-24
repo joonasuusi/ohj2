@@ -27,6 +27,10 @@ public class Main extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("WeatherTracker");
 			
+			primaryStage.setOnCloseRequest((event) -> {
+			    if (!paaCtrl.voikoSulkea() ) event.consume();
+			});
+			
             WeatherTracker weathertracker = new WeatherTracker();
 			paaCtrl.setWeatherTracker(weathertracker);
 			

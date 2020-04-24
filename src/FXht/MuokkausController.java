@@ -18,8 +18,8 @@ import javafx.stage.Stage;
 
 /**
  * Controlleri päivän muokkaukselle ja lisäykselle
- * @author Joonas Uusi-Autti
- * @version 24.3.2020
+ * @author Joonas Uusi-Autti & Sini Lällä
+ * @version 23.4.2020
  *
  */
 public class MuokkausController implements ModalControllerInterface<Paiva>, Initializable {
@@ -31,7 +31,6 @@ public class MuokkausController implements ModalControllerInterface<Paiva>, Init
     @FXML private TextField editYlinLampo;
     @FXML private TextField editSademaara;
     @FXML private TextField editHuomiot;
-    @FXML private TextField editSaatila;
     @FXML private Label labelVirhe;
     @FXML private ComboBoxChooser<Saatila> saaLista;
     
@@ -40,6 +39,7 @@ public class MuokkausController implements ModalControllerInterface<Paiva>, Init
             naytaVirhe("Päivämäärä ei saa olla tyhjä");
             return;
         }
+        kasitteleMuutosSaahan();
         ModalController.closeStage(labelVirhe);
     }
     
@@ -52,12 +52,10 @@ public class MuokkausController implements ModalControllerInterface<Paiva>, Init
     //=========================== omia koodeja ==========================
     private Paiva paivaKohdalla;
     private TextField[] edits;
-    private WeatherTracker weathertracker;
     
     @Override
     public void handleShown() {
         editPvm.requestFocus();
-        
     }
 
     @Override
@@ -81,9 +79,8 @@ public class MuokkausController implements ModalControllerInterface<Paiva>, Init
      * Tekee tarvittavat muut alustukset
      */
     private void alusta() {
-        //asetaChooser();
         edits = new TextField[] {editPvm, editPaikka, editKello, editAlinLampo
-                                ,editYlinLampo, editSademaara, editHuomiot, editSaatila};
+                                ,editYlinLampo, editSademaara, editHuomiot};
         int i = 0;
         for (TextField edit : edits) {
             final int k = ++i;
@@ -91,6 +88,15 @@ public class MuokkausController implements ModalControllerInterface<Paiva>, Init
         }
     }
     
+    /**
+     * Käsitellään säätilaan tullut muutos
+     */
+    private void kasitteleMuutosSaahan() {
+        Saatila k = saaLista.getSelectedObject();
+        paivaKohdalla.setSaatila(k.getId());  
+    }
+
+
     /**
      * Käsitellään päivään tullut muutos
      * @param k kentän numero
@@ -108,7 +114,6 @@ public class MuokkausController implements ModalControllerInterface<Paiva>, Init
         case 5 : virhe = paivaKohdalla.setYlinLampo(s); break;
         case 6 : virhe = paivaKohdalla.setSademaara(s); break;
         case 7 : virhe = paivaKohdalla.setHuomiot(s); break;
-        case 8 : virhe = paivaKohdalla.setSaatila(s); break;
         default:
         }
         if (virhe == null) {
@@ -137,7 +142,6 @@ public class MuokkausController implements ModalControllerInterface<Paiva>, Init
         edits[4].setText(String.valueOf(paiva.getYlinLampo()));
         edits[5].setText(String.valueOf(paiva.getSademaara()));
         edits[6].setText(paiva.getHuomiot());
-        edits[7].setText(String.valueOf(paiva.getSaatila()));
     }
     
     
@@ -148,7 +152,8 @@ public class MuokkausController implements ModalControllerInterface<Paiva>, Init
     public void naytaPaiva(Paiva paiva) {
         naytaPaiva(edits, paiva);
     }
-    
+
+
     /**
      * Näytetään virheilmoitus käyttäjälle
      * @param virhe syntynyt virhe
@@ -168,24 +173,26 @@ public class MuokkausController implements ModalControllerInterface<Paiva>, Init
      * Luodaan päivän kysymisdialogi ja palautetaan sama tietue muutettuna tai null
      * @param modalityStage mille ollaan modaalisia, null=sovellukselle
      * @param oletus mitä dataa näytetään oletuksena
+     * @param weathertracker weathertracker
      * @return null, jos painetaan Cancel, muuten täytetty tietue
      */
-      public static Paiva kysyPaiva(Stage modalityStage, Paiva oletus) {
-          return ModalController.showModal(MuokkausController.class.getResource("muokkausikkuna.fxml"), 
-                  "Muokkaa", modalityStage, oletus);
+      public static Paiva kysyPaiva(Stage modalityStage, Paiva oletus, WeatherTracker weathertracker) {
+   
+          return ModalController.<Paiva,MuokkausController>showModal(MuokkausController.class.getResource("muokkausikkuna.fxml"),
+                  "Muokkaa", modalityStage, oletus, ctrl -> ctrl.asetaChooser(weathertracker, oletus));
       }  
       
-      /**
+    /**
      * Tyhjentää säätilojen valintalistan ja hakee tiedostosta säätilat listaan
+     * @param weathertracker weathertracker
+     * @param paiva päivä
      */
-    public void asetaChooser() {
+      public void asetaChooser(WeatherTracker weathertracker, Paiva paiva) {
           saaLista.clear();
-          String[] rivit = new String[weathertracker.getSaatilat()];
           for (int i = 0; i < weathertracker.getSaatilat(); i++) {
               Saatila saa = weathertracker.annaSaa(i);
-              rivit[i] = saa.getSaatila();
+              saaLista.add(saa.getSaatila(), saa);
           }
-          saaLista.setRivit(rivit);
-      }
-    
+          saaLista.setSelectedIndex(weathertracker.annaChooserNro(paiva.getSaatila()));
+      }  
 }

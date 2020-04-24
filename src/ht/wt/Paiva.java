@@ -1,6 +1,7 @@
 package ht.wt;
 
 import java.io.PrintStream;
+import java.util.Comparator;
 
 import fi.jyu.mit.ohj2.Mjonot;
 
@@ -31,6 +32,36 @@ public class Paiva implements Cloneable {
     
 
     /**
+     * Vertailija joka osaa verrata tietyn kentän mukaan
+     */
+    public static class Vertailija implements Comparator<Paiva> {
+
+        private int k;
+        
+        /**
+         * @param k minkä kentän mukaan vertaillaan
+         */
+        public Vertailija(int k) {
+            this.k = k;
+        }
+        
+        @Override
+        public int compare(Paiva pvm1, Paiva pvm2) {
+            return pvm1.getAvain(k).compareTo(pvm2.getAvain(k));
+        }
+        
+    }
+    
+    /**
+     * kloonataan päivä
+     */
+    @Override
+    public Paiva clone() throws CloneNotSupportedException {
+        Paiva uusi = (Paiva) super.clone();
+        return uusi;
+    }
+    
+    /**
      * Hakee päivämäärän
      * @return palauttaa päivämäärän
      */
@@ -38,7 +69,26 @@ public class Paiva implements Cloneable {
         return pvm;
     }
     
-    
+    /**
+     * Palauttaa kentän k:n mukaisen lajitteluavaimen
+     * @param k minkä kentän mukaan lajitellaan
+     * @return lajitteluavain
+     */
+    public String getAvain(int k) {
+        switch(k) {
+        case 1: return "" + vertailija(pvm);
+        case 2: return "" + vertailija(pvm);
+        case 3: return "" + vertailija(pvm);
+        case 4: return "" + String.format("%02.1f", alinLampo);
+        case 5: return "" + String.format("%02.1f", ylinLampo);
+        case 6: return "" + String.format("%02.1f", sademaara);
+        case 7: return "" + vertailija(pvm);
+        case 8: return "" + saatila;
+        default: return "Nyt meni jokin vikaan!";
+        }
+    }
+
+
     /**
      * Hakee paikan
      * @return palauttaa paikan
@@ -89,6 +139,9 @@ public class Paiva implements Cloneable {
         return huomiot;
     }
     
+    /**
+     * @return palauttaa säätilan
+     */
     public int getSaatila() {
         return saatila;
     }
@@ -119,7 +172,8 @@ public class Paiva implements Cloneable {
     
     
     /**
-     * @param rivi rivi jota luetaan TODO: tarvitaanko setTunnsNro?
+     * Luetaan tiedoston rivit
+     * @param rivi rivi jota luetaan 
      */
     public void parse(String rivi) {
         StringBuilder sb = new StringBuilder(rivi);
@@ -233,22 +287,13 @@ public class Paiva implements Cloneable {
      * @param out mihin virtaa tulostetaan
      */
     public void tulosta(PrintStream out) {
-        out.println(String.format("%03d", tunnusNro));
-        out.println(pvm +  ", " + paikka + ", " + kello);
-        out.println("Päivän alin lämpötila " + String.format("%2.1f", alinLampo) + 
-                "°C" + ", ylin lämpötila " + String.format("%2.1f", ylinLampo) + 
-                "°C" + " ja sademäärä " + String.format("%2.1f", sademaara) + "mm");
-        out.println("Huomiot: " + huomiot);
-        out.println("Säätila: " + saatila);
-    }
-    
-    /**
-     * kloonataan päivä
-     */
-    @Override
-    public Paiva clone() throws CloneNotSupportedException {
-        Paiva uusi = (Paiva) super.clone();
-        return uusi;
+        out.println("Päivämäärä:        " + pvm);
+        out.println("Paikka:            " + paikka);
+        out.println("Kellonaika:        " + kello);
+        out.println("Alin lämpötila:    " + String.format("%2.1f", alinLampo) + "°C");
+        out.println("Ylin lämpötila:    " + String.format("%2.1f", ylinLampo) + "°C");
+        out.println("Sademäärä:         " + String.format("%2.1f", sademaara) + "mm");
+        out.println("Huomiot:           " + huomiot); 
     }
 
 
@@ -258,7 +303,8 @@ public class Paiva implements Cloneable {
      * @return null, jos onnistui
      */
     public String setPvm(String s) {
-        if( !s.matches("[0-9]*\\.[0-9]*\\.[0-9]*")) return "Päivämäärän pitää olla muota pp.kk.vvvv";
+        if( !s.matches("((((([0-2]{1})[0-9]{1}))|(3{1}[0-1]{1}))\\.((0{1}[1-9])|1{1}[0-2]{1})\\.([0-9]{4}))")) 
+            return "Päivämäärän pitää olla muota pp.kk.vvvv";
         pvm = s;
         return null;
     }
@@ -281,6 +327,7 @@ public class Paiva implements Cloneable {
      * @return nuul, jos onnistui
      */
     public String setKello(String s) {
+        if( !s.matches("^([0-1][0-9]|[2][0-3])[\\\\.|:]([0-5][0-9])$")) return "Kellonaika väärin!";
         kello = s;
         return null;
     }
@@ -331,9 +378,53 @@ public class Paiva implements Cloneable {
        return null;
     }
    
-   public String setSaatila(String s) {
-       StringBuilder sb = new StringBuilder(s);
-       saatila = Mjonot.erota(sb, '§', saatila);
-       return null;
+     /**
+     * Asettaa säätilan
+     * @param s asetettava säätila
+     */
+    public void setSaatila(int s) {
+       //StringBuilder sb = new StringBuilder(s);
+       //saatila = Mjonot.erota(sb, '§', saatila);
+       //return null;
+        saatila = s;
     }
+    
+
+   
+    /**
+     * Palauttaa pyydetyn kentän indeksin
+     * @param hk pyydetty kenttö
+     * @return pyydetty kenttä
+     * TODO: korjaa nää kommentit
+     */
+    public String anna(int hk) {
+        switch(hk) {
+            case 1: return "" + pvm;
+            case 2: return "" + paikka;
+            case 3: return "" + kello;
+            case 4: return "" + alinLampo;
+            case 5: return "" + ylinLampo;
+            case 6: return "" + sademaara;
+            case 7: return "" + huomiot;
+            case 8: return "" + saatila;
+            default: return "jee";
+        }
+    }
+
+    /**
+     * 
+     * @param paiva Päivä
+     * @return palauttaa päivämäärän muodossa vvvkkpv
+     */
+    public static String vertailija(String paiva) {
+        StringBuilder sb = new StringBuilder(paiva);
+        String pv = Mjonot.erota(sb, '.');
+        String kk = Mjonot.erota(sb, '.');
+        String vv = Mjonot.erota(sb, '.');
+        
+        //String vvkkpp = String.format("%04s", "%02s", "%02s",vv + kk + pv);
+        String vvkkpp = vv + kk + pv;
+        return vvkkpp;
+    }
+
 }

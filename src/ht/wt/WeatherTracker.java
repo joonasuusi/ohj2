@@ -3,6 +3,8 @@
  */
 package ht.wt;
 
+import java.util.Collection;
+
 /**                                                
  * Huolehtii Paivat ja Saatilat luokkien välisestä  
  * yhteistyöstä ja välittää näitä tietoja pyydettäessä                                     
@@ -106,12 +108,22 @@ public class WeatherTracker {
     /**
      * Palauttaa i:n säätilan
      * @param i monesko säätila palautetaan
-     * @return viite i:teen söötilaan
+     * @return viite i:teen säätilaan
      */
     public Saatila annaSaa(int i) {
         return saatilat.anna(i);
     }
 
+    
+    /**
+     * Palauttaa annettua id:tä vastaavan säätilan
+     * @param id jota vastaava säätila halutaan
+     * @return id:tä vastaava säätila
+     */
+    public Saatila annaSaaId(int id) {
+        return saatilat.getId(id);
+    }
+    
     
     /**
      * Tallentaa molemmat tiedostot
@@ -154,4 +166,58 @@ public class WeatherTracker {
     public void korvaaTaiLisaa(Paiva paiva) throws SailoException {
         paivat.korvaaTaiLisaa(paiva);
     }
+
+    
+    /**
+     * Palauttaa "taulukossa" vastaavien päivien viitteet
+     * @param hakuehto hakuehto
+     * @param k etsittävän kentän indeksi
+     * @return tietorakenteen löytyvistä päivistä
+     */
+    public Collection<Paiva> etsi(String hakuehto, int k) {
+        return paivat.etsi(hakuehto, k);
+    }
+
+
+    /**
+     * Poistetaan halutun päivän tiedot
+     * @param paiva joka halutaan poistaa
+     * @return montako päivää poistettiin
+     */
+    public int poista(Paiva paiva) {
+        if ( paiva == null ) return 0;
+        int ret = paivat.poista(paiva.getTunnusNro());  
+        return ret; 
+
+    }
+
+
+    /**
+     * Poistetaan haluttu säätila
+     * @param saa poistettava säätila
+     */
+    public void poista(int saa) {
+        saatilat.poista(saa);
+    }
+
+
+    /**
+     * Hakee oikean sään näkyviin
+     * @param id sään id
+     * @return palauttaa id:n
+     */
+    public int annaChooserNro(int id) {
+        return saatilat.annaChooserNro(id);
+    }
+
+
+    /**
+     * Palauttaa viitteen i:teen säätilaan
+     * @param i monennenko säätilan viite halutaan
+     * @return viite säätilaan jonka indeksi on i
+     */
+    public Saatila anna(int i) {
+        return saatilat.anna(i);
+    }
+
 }

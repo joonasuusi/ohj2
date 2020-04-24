@@ -22,7 +22,7 @@ public class PaivaLuonti {
     
     /**
      * Arvotaan satunnainen päivä
-     * @return satunnaine päivä
+     * @return satunnainen päivä
      */
     public static String arvoPaiva() {
         String apuPaiva = String.format("%02d", rand(1,28)) + "." +

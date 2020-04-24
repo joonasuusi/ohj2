@@ -2,15 +2,19 @@ package FXht;
 
 import java.awt.Desktop;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.ResourceBundle;
+
+import fi.jyu.mit.fxgui.ComboBoxChooser;
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ListChooser;
 import fi.jyu.mit.fxgui.ModalController;
+import fi.jyu.mit.fxgui.TextAreaOutputStream;
 import fi.jyu.mit.ohj2.Mjonot;
 import ht.wt.Paiva;
 import ht.wt.Saatila;
@@ -21,6 +25,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 
@@ -34,6 +39,8 @@ public class PaaIkkunaController implements Initializable {
     @FXML private Button textCancel;
     @FXML ListChooser<Paiva> chooserPaivat;
     @FXML private ScrollPane panelPaiva;
+    @FXML private ComboBoxChooser<String> hakuKentta;
+    @FXML private TextField hakuehto;
     
     @FXML private TextField editPvm;
     @FXML private TextField editPaikka;
@@ -48,6 +55,11 @@ public class PaaIkkunaController implements Initializable {
     @FXML private void handleUusi() {
         uusiPaiva();
     } 
+    
+    @FXML private void handleHakuehto() {
+        if (paivaKohdalla != null) 
+            hae(paivaKohdalla.getTunnusNro());
+    }
     
     @FXML private void handleSaatila() {
         TextInputDialog dialog = new TextInputDialog("");
@@ -89,14 +101,12 @@ public class PaaIkkunaController implements Initializable {
     }
     
     @FXML private void handleTulosta() {
-        Dialogs.showMessageDialog("Ei osata vielä tulostaa");
+        TulostusController tulostusCtrl = TulostusController.tulosta(null);
+        tulostaValitut(tulostusCtrl.getTextArea());
     }
-    
+
     @FXML private void handlePoista() {
-        boolean vastaus = Dialogs.showQuestionDialog("Poistetaanko?",
-                "Poistetaanko päivämäärä " + chooserPaivat.getSelectedText().toString(), "Kyllä", "Ei");
-        if(vastaus == true) Dialogs.showMessageDialog("Ei osata vielä poistaa");
-        // if (vastaus) poistaPvm(true)
+        poistaPaiva();
     }
 
     
@@ -122,6 +132,14 @@ public class PaaIkkunaController implements Initializable {
         alusta();
     }
     
+    /**
+     * Tarkistetaan onko tallennus tehty
+     * @return true, jos saa sulkea sovelluksen, false jos ei
+     */
+    public boolean voikoSulkea() {
+        tallenna();
+        return true;
+    }
     
     /**
      * Aliohjelma joka ohjaa sivustolle jossa käyttöohjeet käyttöliittymälle
@@ -150,13 +168,25 @@ public class PaaIkkunaController implements Initializable {
         } 
     }
     
+    private void poistaPaiva() {
+        Paiva paiva = paivaKohdalla;
+        if ( paiva == null ) return;
+        if ( !Dialogs.showQuestionDialog("Poisto", "Poistetaanko päivä: " + paiva.getPvm(), "Kyllä", "Ei") )
+            return;
+        weathertracker.poista(paiva);
+        int index = chooserPaivat.getSelectedIndex();
+        hae(0);
+        chooserPaivat.setSelectedIndex(index);
+    }
+
+    
     
     /**
      * Lisätään uusi päivämäärä tiedoilla näyttöön
      */
     private void uusiPaiva() {
         Paiva uusi = new Paiva();
-        uusi = MuokkausController.kysyPaiva(null, uusi);
+        uusi = MuokkausController.kysyPaiva(null, uusi, weathertracker);
         if (uusi == null) return;
         uusi.rekisteroi();
         weathertracker.lisaa(uusi);
@@ -181,14 +211,27 @@ public class PaaIkkunaController implements Initializable {
      * @param pnro päivämäärän järjestysnumero
      */
     private void hae(int pnro) {
+        int nro = pnro;
+        if ( nro <= 0 ) {
+            Paiva kohdalla = paivaKohdalla;
+            if (kohdalla != null) nro = kohdalla.getTunnusNro();
+        }
+        
+        int k = hakuKentta.getSelectionModel().getSelectedIndex()+1;
+        String ehto = hakuehto.getText();
+        if (ehto.indexOf('*') < 0) ehto = "*" + ehto + "*";
+
         chooserPaivat.clear();
         
         int index = 0;
-        for (int i = 0; i < weathertracker.getPaivat(); i++) {
-            Paiva paiva = weathertracker.annaPaiva(i);
-            if (paiva.getTunnusNro() == pnro) index = i;
-            chooserPaivat.add(paiva.getPvm(), paiva);
-        }
+        Collection<Paiva> paivat;
+            paivat = weathertracker.etsi(ehto, k); 
+            int i = 0;
+            for (Paiva paiva : paivat) {
+                if (paiva.getTunnusNro() == nro) index = i;
+                chooserPaivat.add(paiva.getPvm(), paiva);
+                i++;
+            }
         chooserPaivat.setSelectedIndex(index);
     }
 
@@ -197,14 +240,25 @@ public class PaaIkkunaController implements Initializable {
      * Alustetaan ja luodaan näyttöön uusi päivä
      */
     private void alusta() {
+        hakuKentta.clear();
+        hakuKentta.add("Päivämäärä");
+        hakuKentta.add("Paikka");
+        hakuKentta.add("Kello");
+        hakuKentta.add("Alin lämpötila");
+        hakuKentta.add("Ylin lämpötila");
+        hakuKentta.add("Sademäärä");
+        hakuKentta.add("Huomiot");
+        hakuKentta.add("Säätila");
+        hakuKentta.getSelectionModel().select(0);
+        
         panelPaiva.setFitToHeight(true);
         
         chooserPaivat.clear();
         chooserPaivat.addSelectionListener(e -> naytaPaiva());
         
         edits = new TextField[] {editPvm, editPaikka, editKello, editAlinLampo,
-                                editYlinLampo, editSademaara, editHuomiot, editSaatila};
-
+                                editYlinLampo, editSademaara, editHuomiot};
+        
     }
     
     
@@ -214,7 +268,7 @@ public class PaaIkkunaController implements Initializable {
     private void muokkaa() {
         if ( paivaKohdalla == null) return;
         try {
-            Paiva paiva = MuokkausController.kysyPaiva(null, paivaKohdalla.clone());
+            Paiva paiva = MuokkausController.kysyPaiva(null, paivaKohdalla.clone(), weathertracker);
             if ( paiva == null) return;
             weathertracker.korvaaTaiLisaa(paiva);
             hae(paiva.getTunnusNro());
@@ -246,7 +300,7 @@ public class PaaIkkunaController implements Initializable {
     private void naytaSaa(TextField text, Paiva paiva) {
         if (paiva == null) return;
         int numero = paiva.getSaatila();
-        Saatila s = weathertracker.annaSaa(numero-1);
+        Saatila s = weathertracker.annaSaaId(numero);
         StringBuilder sb = new StringBuilder(s.toString());
         String jono = Mjonot.erota(sb, '|');
         jono = Mjonot.erota(sb, '|');
@@ -294,4 +348,32 @@ public class PaaIkkunaController implements Initializable {
         lueTiedostosta();
         return true;
     }
+    
+    /**
+     * Tulostaa listassa olevat päivät tekstialueeseen
+     * @param text alue, johon tulostetaan
+     */
+    private void tulostaValitut(TextArea text) {
+        try (PrintStream os = TextAreaOutputStream.getTextPrintStream(text)) {
+            os.println("Tulostetaan kaikki päivät");
+            for (Paiva paiva : chooserPaivat.getObjects()) {
+                tulosta(os, paiva);
+                os.println();
+            }
+        } 
+    }
+
+    /**
+     * Tulostetaan jäsenen tiedot
+     * @param os tietovirta johon tulostetaan
+     * @param paiva tulostettava päivä
+     */
+    public void tulosta(PrintStream os, final Paiva paiva) {
+        os.println("----------------------------------------------");
+        paiva.tulosta(os);
+        int saaIdNro = paiva.getSaatila();
+        Saatila saa = weathertracker.annaSaaId(saaIdNro);
+        saa.tulosta(os);
+    }
+
 }

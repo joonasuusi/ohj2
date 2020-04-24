@@ -22,6 +22,7 @@ import java.util.Scanner;
  *
  */
 public class Saatilat implements Iterable<Saatila> {
+    Saatila saatila = new Saatila("");
     private int lkm = 0;
     
     /**
@@ -68,26 +69,7 @@ public class Saatilat implements Iterable<Saatila> {
      * @param args ei käytössä
      */
     public static void main(String[] args) {;
-        /*
-        Saatila saa = new Saatila();
-        Saatila saa1 = new Saatila();
-        Saatila saa2 = new Saatila();
-        Saatilat aur = new Saatilat();
-        
-        saa.rekisteroi();
-        saa1.rekisteroi();
-        saa2.rekisteroi();
-        saa.taytaTiedoilla();
-        saa1.taytaTiedoilla();
-        saa2.taytaTiedoilla();
-        
-        aur.lisaa(saa);
-        aur.lisaa(saa1);
-        aur.lisaa(saa2);
-        saa.tulosta(System.out);
-        saa1.tulosta(System.out);
-        saa2.tulosta(System.out);
-        */
+       //
     }
 
     
@@ -98,7 +80,7 @@ public class Saatilat implements Iterable<Saatila> {
     public void tallenna() throws SailoException {
         try (PrintStream fo = new PrintStream(new FileOutputStream("saatilat.dat", false))) {
             //fo.println("WeatherTracker"); ei välttämättä tarvitse tai tulostuu joka kerta kun tallennetaan
-            for (int i = 0; i < alkiot.size(); i++) {
+            for (int i = 0; i < getLkm(); i++) {
                 Saatila saa = anna(i);
                 fo.println(saa.toString());
             }
@@ -137,4 +119,40 @@ public class Saatilat implements Iterable<Saatila> {
     public Saatila anna(int i) {
         return alkiot.get(i);
     }
+
+
+    /**
+     * Poistetaan annettua id:tä vastaava säätila
+     * @param saa poistettava säätila
+     */
+    public void poista(int saa) {
+        alkiot.remove(saa);
+        lkm--;
+    }
+
+
+    /**
+     * Palautetaan annettua id:tä vastaava säätila
+     * @param id säätilan id
+     * @return annettua id:tä vastaava säätila, jos ei löydy
+     * niin teksti "SÄÄTILA POISTETTU"
+     */
+    public Saatila getId(int id) {
+        for (int i = 0; i < lkm; i++) 
+          if (id == alkiot.get(i).getId()) return alkiot.get(i);
+        return alkiot.get(0);
+    }
+
+
+    /**
+     * 
+     * @param id sään id
+     * @return palauttaa idtä vastaavan säätilan
+     */
+    public int annaChooserNro(int id) {
+        for (int i = 0; i < lkm; i++) 
+            if (id == alkiot.get(i).getId()) return i;
+        return -1;
+    }    
+    
 }
