@@ -407,9 +407,6 @@ public class Paiva {
                 "sademaara, huomiot, saatila) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
         
-        // Syötetään kentät näin välttääksemme SQL injektiot.
-        // Käyttäjän syötteitä ei ikinä vain kirjoiteta kysely
-        // merkkijonoon tarkistamatta niitä SQL injektioiden varalta!
         if ( tunnusNro != 0 ) sql.setInt(1, tunnusNro); else sql.setString(1, null);
         sql.setString(2, pvm);
         sql.setString(3, paikka);

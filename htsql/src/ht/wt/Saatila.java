@@ -34,6 +34,10 @@ public class Saatila {
        // 
     }
     
+    /**
+     * Alustetaan tietyn päivän säätila
+     * @param paivanNro päivän numero
+     */
     public Saatila(int paivanNro) {
         this.paivanNro = paivanNro;
     }
@@ -150,7 +154,7 @@ public class Saatila {
     /**
      * Antaa säätilan lisäyslausekkeen
      * @param con tietokanta yhteys
-     * @return Päivän lisäyslauseke
+     * @return Säätilan lisäyslauseke
      * @throws SQLException jos lausekkeen luonnissa on ongelmia
      */
     public PreparedStatement annaLisayslauseke(Connection con)
@@ -158,9 +162,6 @@ public class Saatila {
     PreparedStatement sql = con.prepareStatement(
             "INSERT INTO Saatilat (saaId, paivanID, saatila) VALUES (?, ?, ?)");
     
-    // Syötetään kentät näin välttääksemme SQL injektiot.
-    // Käyttäjän syötteitä ei ikinä vain kirjoiteta kysely
-    // merkkijonoon tarkistamatta niitä SQL injektioiden varalta!
     if ( id != 0 ) sql.setInt(1, id); else sql.setString(1, null);
     sql.setInt(2, paivanNro);
     sql.setString(3, saatila);
@@ -168,7 +169,10 @@ public class Saatila {
         return sql;
     }
 
-    
+    /**
+     * Antaa tietokannan luontilausekkeen Saatilat taululle
+     * @return palauttaa Saatila taulun luontilausekkeen
+     */
     public String annaLuontilauseke() {
         return "CREATE TABLE Saatilat (" +
                 "saaId INTEGER PRIMARY KEY AUTOINCREMENT , " +
@@ -195,7 +199,7 @@ public class Saatila {
      */
     public void paivanSaa(int nro) {
         paivanNro = nro;
-        saatila = "Säätila " + nro + " on, aurinkoinen " + rand(0, 10); 
+        saatila = "Säätila " + nro + " on, aurinkoinen " + nro; 
     }
 
     /**

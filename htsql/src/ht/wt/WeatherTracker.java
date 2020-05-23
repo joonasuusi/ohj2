@@ -17,6 +17,33 @@ import java.util.List;
  *
  */
 public class WeatherTracker {
+    /*
+     * Alustuksia ja puhdistuksia testiä varten
+     * @example
+     * <pre name="testJAVA">
+     * #import java.io.*;
+     * #import java.util.*;
+     * 
+     * private WeatherTracker weathertracker;
+     * private String tiedNimi;
+     * private File ftied;
+     * 
+     * @Before
+     * public void alusta() throws SailoException { 
+     *    weathertracker = new WeatherTracker();
+     *    tiedNimi = "testiweathertracker";
+     *    ftied = new File(tiedNimi+".db");
+     *    ftied.delete();
+     *    weathertracker.lueTiedostosta(tiedNimi);
+     * }   
+     *
+     * @After
+     * public void siivoa() {
+     *    ftied.delete();
+     * }   
+     * </pre>
+     */ 
+    
     private Paivat paivat;
     private Saatilat saatilat;
  
@@ -62,19 +89,19 @@ public class WeatherTracker {
      * @throws SailoException jos ei mahu
      * @example
      * <pre name="test">
-     *  WeatherTracker weathertracker = new WeatherTracker();
-     *  Paiva pvm = new Paiva(), pvm1 = new Paiva();
-     *  weathertracker.getPaivat() === 0;
-     *  weathertracker.lisaa(pvm1); weathertracker.getPaivat() === 1;
-     *  weathertracker.lisaa(pvm); weathertracker.getPaivat() === 2;
-     *  weathertracker.lisaa(pvm1); weathertracker.getPaivat() === 3;
-     *  weathertracker.annaPaiva(0) === pvm1;
-     *  weathertracker.annaPaiva(1) === pvm;
-     *  weathertracker.annaPaiva(2) === pvm1;
-     *  weathertracker.annaPaiva(3) === pvm; #THROWS IndexOutOfBoundsException
-     *  weathertracker.lisaa(pvm1); weathertracker.getPaivat() === 4;
-     *  weathertracker.lisaa(pvm1); weathertracker.getPaivat() === 5;
-     *  weathertracker.lisaa(pvm1); weathertracker.getPaivat() === 6;
+     * #THROWS SailoException
+     * Paiva pvm1 = new Paiva(); pvm1.taytaPvmTiedoilla(); 
+     * Paiva pvm2 = new Paiva(); pvm2.taytaPvmTiedoilla(); 
+     * weathertracker.lisaa(pvm1);
+     * Collection<Paiva> loytyneet = weathertracker.etsi("", -1);
+     * loytyneet.size() === 1;
+     * loytyneet.iterator().next() === pvm1;
+     * weathertracker.lisaa(pvm2);
+     * loytyneet = kerho.etsi("", -1);
+     * loytyneet.size() === 2;
+     * Iterator<Paiva> it = loytyneet.iterator(); 
+     * it.next() === pvm1;
+     * it.next() === pvm2;
      * </pre>
      */
     public void lisaa(Paiva paiva) throws SailoException {
@@ -86,6 +113,16 @@ public class WeatherTracker {
      * Lisätään säätila
      * @param saatila lisätään
      * @throws SailoException jos ei mahu
+     * @example
+     * <pre name="test">
+     * #THROWS SailoException
+     * Paiva pvm = new Paiva(); pvm.taytaPvmTiedoilla(); 
+     * weathertracker.lisaa(pvm);
+     * Saatila saa = new Saatila();
+     * saa.paivaSaa(pvm.getTunnusNro());
+     * weathertracker.lisaa(saa);
+     *  weathertracker.annaSaatilat(pvm).get(0) === saa;
+     * </pre>
      */
     public void lisaa(Saatila saatila) throws SailoException {
         saatilat.lisaa(saatila); 
@@ -101,8 +138,9 @@ public class WeatherTracker {
     }
 
     /**
-     * Luetaan tiedosto
-     * @param nimi tiedoston nimi
+     * Luo tietokannan jos annettu tiedosto on olemassa ja sisältää
+     * tarvitut taulut, ei luoda mitään
+     * @param nimi tietokannan nimi
      * @throws SailoException jos joku menee pieleen
      */
     public void lueTiedostosta(String nimi) throws SailoException {
@@ -112,11 +150,27 @@ public class WeatherTracker {
 
     
     /**
-     * Palauttaa "taulukossa" vastaavien päivien viitteet
+     * Palauttaa päivät listassa
      * @param hakuehto hakuehto
      * @param k etsittävän kentän indeksi
      * @return tietorakenteen löytyvistä päivistä
      * @throws SailoException jos ei mahu
+     * @example
+     * <pre name="test">
+     * #THROWS SailoException
+     * Paiva pvm1 = new Paiva(); pvm1.taytaPvmTiedoilla(); 
+     * Paiva pvm2 = new Paiva(); pvm2.taytaPvmTiedoilla();  
+     * paivat.lisaa(pvm1);
+     * paivat.lisaa(pvm2);
+     * paivat.lisaa(pvm2);  #THROWS SailoException  // ei saa lisätä sama id:tä uudelleen
+     * Collection<Paiva> loytyneet = weathertracker.etsi(pvm1.getPvm(), 1);
+     * loytyneet.size() === 1;
+     * loytyneet.iterator().next() === pvm1;
+     * loytyneet = weathertracker.etsi(pvm2.getPvm(), 1);
+     * loytyneet.size() === 1;
+     * loytyneet.iterator().next() === pvm2;
+     * weathertracker.etsi("", 15); #THROWS SailoException
+     * </pre>
      */
     public Collection<Paiva> etsi(String hakuehto, int k) throws SailoException {
         return paivat.etsi(hakuehto, k);
@@ -133,7 +187,26 @@ public class WeatherTracker {
 
     }
 
-
+    /**
+     * Haetaan päivän säätila
+     * @param paiva päivä jolle säätila haetaan
+     * @return Tietorakenne jossa viitteet löydettyihin  säätiloihin
+     * @throws SailoException jostain menee pieleen
+     * @example
+     * <pre name="test">
+     * #THROWS SailoException
+     * Paiva pvm1 = new Paiva(); pvm1.taytaPvmTiedoilla();
+     * weathertracker.lisaa(pvm1);
+     * Saatila saa = new Saatila(); 
+     * saa.paivanSaa(pvm1.getTunnusNro()); 
+     * weathertracker.lisaa(saa);
+     * weathertracker.annaSaatilat(pvm1).get(0) === saa;
+     *
+     * Paiva pvm2 = new Paiva(); pvm2.taytaPvmTiedoilla(); 
+     * weathertracker.lisaa(pvm2);
+     * weathertracker.annaSaatilat(pvm2).size() === 0;
+     * </pre>
+     */
     public List<Saatila> annaSaatilat(Paiva paiva) throws SailoException {
         return saatilat.annaSaatilat(paiva.getTunnusNro());
     }

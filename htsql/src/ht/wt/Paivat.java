@@ -35,6 +35,32 @@ import static ht.wt.Kanta.alustaKanta;
  *
  */
 public class Paivat { //implements Iterable<Paiva> {
+    /*
+     * Alustuksia ja puhdistuksia testiä varten
+     * @example
+     * <pre name="testJAVA">
+     * #import java.io.*;
+     * #import java.util.*;
+     * 
+     * private Paivat paivat;
+     * private String tiedNimi;
+     * private File ftied;
+     * 
+     * @Before
+     * public void alusta() throws SailoException { 
+     *    tiedNimi = "testiweathertracker";
+     *    ftied = new File(tiedNimi+".db");
+     *    ftied.delete();
+     *    paivat = new Paivat(tiedNimi);
+     * }   
+     *
+     * @After
+     * public void siivoa() {
+     *    ftied.delete();
+     * }   
+     * </pre>
+     */ 
+    
     private Kanta kanta;
     private static Paiva apuPaiva = new Paiva();
 
@@ -47,16 +73,10 @@ public class Paivat { //implements Iterable<Paiva> {
     public Paivat(String nimi) throws SailoException {
         kanta = alustaKanta(nimi);
         try ( Connection con = kanta.annaKantayhteys() ) {
-            // Hankitaan tietokannan metadata ja tarkistetaan siitä onko
-            // Jasenet nimistä taulua olemassa.
-            // Jos ei ole, luodaan se. Ei puututa tässä siihen, onko
-            // mahdollisesti olemassa olevalla taululla oikea rakenne,
-            // käyttäjä saa kuulla siitä virheilmoituksen kautta
             DatabaseMetaData meta = con.getMetaData();
             
             try ( ResultSet taulu = meta.getTables(null, null, "Paivat", null) ) {
                 if ( !taulu.next() ) {
-                    // Luodaan Jasenet taulu
                     try ( PreparedStatement sql = con.prepareStatement(apuPaiva.annaLuontilauseke()) ) {
                         sql.execute();
                     }
@@ -105,21 +125,31 @@ public class Paivat { //implements Iterable<Paiva> {
      * @throws SailoException jos ei mahu
      * @example
      * <pre name="test">
-     *  Paivat paivat = new Paivat();
-     *  Paiva pvm = new Paiva(), pvm1 = new Paiva();
-     *  paivat.getLkm() === 0;
-     *  paivat.lisaa(pvm1); paivat.getLkm() === 1;
-     *  paivat.lisaa(pvm); paivat.getLkm() === 2;
-     *  paivat.lisaa(pvm1); paivat.getLkm() === 3;
-     *  paivat.anna(0) === pvm1;
-     *  paivat.anna(1) === pvm;
-     *  paivat.anna(2) === pvm1;
-     *  paivat.anna(1) == pvm1 === false;
-     *  paivat.anna(1) == pvm === true;
-     *  paivat.anna(3) === pvm; #THROWS IndexOutOfBoundsException
-     *  paivat.lisaa(pvm1); paivat.getLkm() === 4;
-     *  paivat.lisaa(pvm1); paivat.getLkm() === 5;
-     *  paivat.lisaa(pvm1); paivat.getLkm() === 6;
+     * #THROWS SailoException 
+     * 
+     * Collection<Paiva> loytyneet = paivat.etsi("", 1);
+     * loytyneet.size() === 0;
+     * 
+     * Paiva pvm1 = new Paiva(), pvm2 = new Paiva();
+     * paivat.lisaa(pvm1); 
+     * paivat.lisaa(pvm2);
+     *  
+     * loytyneet = paivat.etsi("", 1);
+     * loytyneet.size() === 2;
+     * 
+     * // Unique constraint ei hyväksy
+     * paivat.lisaa(pvm1); #THROWS SailoException
+     * Paiva pvm3 = new Paiva(); Paiva pvm4 = new Paiva(); Paiva pvm5 = new Paiva();
+     * paivat.lisaa(pvm3); 
+     * paivat.lisaa(pvm4); 
+     * paivat.lisaa(pvm5); 
+
+     * loytyneet = paivat.etsi("", 1);
+     * loytyneet.size() === 5;
+     * Iterator<Paiva> i = loytyneet.iterator();
+     * i.next() === pvm1;
+     * i.next() === pvm2;
+     * i.next() === pvm3;
      * </pre>
      */
     public void lisaa(Paiva paiva) throws SailoException {
@@ -136,39 +166,34 @@ public class Paivat { //implements Iterable<Paiva> {
 
 
     /**
-     * palauttaa "taulukossa" hakuehtoa vastaavien päivien viitteet
+     * palauttaa päivät listassa
      * @param hakuehto hakuehto
      * @param k etsittävän kentän indeksi
-     * @return tietorakenteen löytyneistä päivistä
+     * @return päivät listassa
      * @throws SailoException jos ei mahu
      * @example
      * <pre name="test">
-     *  Paivat paivat = new Paivat();
-     *  Paiva paiva1 = new Paiva(); paiva1.parse("1|13.09.2002|Rovaniemi|13.05|");
-     *  Paiva paiva2 = new Paiva(); paiva2.parse("2|03.10.2020|Orivesi|13.45|");
-     *  Paiva paiva3 = new Paiva(); paiva3.parse("3|20.01.2019|Oulu|20.45|");
-     *  Paiva paiva4 = new Paiva(); paiva4.parse("4|24.12.2020|Helsinki|07.45|");
-     *  paivat.lisaa(paiva1); paivat.lisaa(paiva2); paivat.lisaa(paiva3); paivat.lisaa(paiva4);
-     *  List<Paiva> loytyneet;
-     *  loytyneet = (List<Paiva>)paivat.etsi("*3*", 1);
-     *  loytyneet.size() === 2;
-     *  loytyneet.get(0) == paiva2 === true;
-     *  loytyneet.get(1) == paiva1 === true;
-     *  
-     *  loytyneet = (List<Paiva>)paivat.etsi("*l*", 2);
-     *  loytyneet.size() === 2;
-     *  loytyneet.get(0) == paiva4 === true;
-     *  loytyneet.get(1) == paiva3 === true;
-     *  
-     *  loytyneet = (List<Paiva>)paivat.etsi(null, -1);
-     *  loytyneet.size() === 4;
+     * #THROWS SailoException
+     * Paiva pvm1 = new Paiva(); pvm1.taytaPvmTiedoilla(); 
+     * Paiva pvm2 = new Paiva(); pvm2.taytaPvmTiedoilla(); 
+     * paivat.lisaa(pvm1);
+     * paivat.lisaa(pvm2);
+     * paivat.lisaa(pvm2);  #THROWS SailoException  // ei saa lisätä sama id:tä uudelleen
+     * Collection<Paiva> loytyneet = paivat.etsi(pvm1.getPvm(), 1);
+     * loytyneet.size() === 1;
+     * loytyneet.iterator().next() === pvm1;
+     * loytyneet = paivat.etsi(pvm2.getPvm(), 1);
+     * loytyneet.size() === 1;
+     * loytyneet.iterator().next() === pvm2;
+     * loytyneet = paivat.etsi("", 15); #THROWS SailoException
+     *
+     * ftied.delete();
      * </pre>
      */
     public Collection<Paiva> etsi(String hakuehto, int k) throws SailoException {
         String ehto = hakuehto;
         String kysymys = apuPaiva.getKysymys(k);
         if ( k < 0 ) { kysymys = apuPaiva.getKysymys(0); ehto = ""; }
-        // Avataan yhteys tietokantaan try .. with lohkossa.
         try ( Connection con = kanta.annaKantayhteys();
               PreparedStatement sql = con.prepareStatement("SELECT * FROM Paivat WHERE " + kysymys + " LIKE ?") ) {
             ArrayList<Paiva> loytyneet = new ArrayList<Paiva>();

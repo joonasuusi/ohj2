@@ -24,6 +24,32 @@ import static ht.wt.Kanta.alustaKanta;
  *
  */
 public class Saatilat {
+    /*
+     * Alustuksia ja puhdistuksia testiä varten
+     * @example
+     * <pre name="testJAVA">
+     * #import java.io.*;
+     * #import java.util.*;
+     * 
+     * private Saatilat saatilat;
+     * private String tiedNimi;
+     * private File ftied;
+     * 
+     * @Before
+     * public void alusta() throws SailoException { 
+     *    tiedNimi = "testiweathertracker";
+     *    ftied = new File(tiedNimi+".db");
+     *    ftied.delete();
+     *    saatilat = new Saatilat(tiedNimi);
+     * }   
+     *
+     * @After
+     * public void siivoa() {
+     *    ftied.delete();
+     * }   
+     * </pre>
+     */ 
+    
     private static Saatila apuSaatila = new Saatila();
     private Kanta kanta;
     
@@ -54,7 +80,11 @@ public class Saatilat {
     /**
      * Lisää uuden säätilan tietorakenteeseen
      * @param saa lisättävä säätila
-     * @throws SailoException jos ei mahu
+     * @throws SailoException jos jotain menee pieleen
+     * @example
+     * <pre name="test">
+     * #THROWS SailoException
+     * </pre>
      */
     public void lisaa(Saatila saa) throws SailoException {
         try ( Connection con = kanta.annaKantayhteys(); PreparedStatement sql = saa.annaLisayslauseke(con) ) {
@@ -102,12 +132,42 @@ public class Saatilat {
         }
         
         new File("kokeilu.db").delete();
-    } catch (SailoException ex) {
-        System.out.println(ex.getMessage());
-    }
+        } catch (SailoException ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
-
+    /**
+     * Haetaan säätilat
+     * @param i Päivän tunnusnumero jolle haetaan
+     * @return Tietorakenne jossa viitteet löydettyihin säätiloihin
+     * @throws SailoException jos jotain menee pieleen
+     * @example
+     * <pre name="test">
+     * #THROWS SailoException
+     *  
+     *  Saatila saa1 = new Saatila(1); saa1.paivanSaa(1); saatilat.lisaa(saa1);
+     *  Saatila saa2 = new Saatila(2); saa2.paivanSaa(2); saatilat.lisaa(saa2);
+     *  Saatila saa3 = new Saatila(3); saa3.paivanSaa(3); saatilat.lisaa(saa3);
+     *  Saatila saa4 = new Saatila(4); saa4.paivanSaa(4); saatilat.lisaa(saa4);
+     *  Saatila saa5 = new Saatila(5); saa5.paivanSaa(5); saatilat.lisaa(saa5);
+     *  Saatila saa6 = new Saatila(6); saa6.paivanSaa(6); saatilat.lisaa(saa6);
+     *  
+     *  
+     *  List<Saatila> loytyneet;
+     *  loytyneet = saatilat.annaSaatilat(3);
+     *  loytyneet.size() === 1; 
+     *  loytyneet = saatlat.annaSaatilat(1);
+     *  loytyneet.size() === 1; 
+     *  
+     *  loytyneet.get(0) === saa3;
+     *  loytyneet.get(1) === saa2;
+     *  
+     *  loytyneet = saatilat.annaSaatilat(5);
+     *  loytyneet.size() === 1; 
+     *  loytyneet.get(0) === saa5;
+     * </pre> 
+     */
     public List<Saatila> annaSaatilat(int i) throws SailoException {
         List<Saatila> loydetyt = new ArrayList<Saatila>();
         
